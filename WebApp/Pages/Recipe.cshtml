@@ -1,0 +1,22 @@
+﻿@page
+@model Domain.Recipe
+
+<h1>@Model.Name</h1>
+
+<p>@Model.Description</p>
+
+<h2>Ingredients:</h2>
+<ul>
+    @foreach (var ingredient in Model.Ingredients)
+    {
+        <li>@ingredient</li>
+    }
+</ul>
+
+<h2>Steps:</h2>
+<ol>
+    @foreach (var step in Model.Steps)
+    {
+        <li>@step</li>
+    }
+</ol>
