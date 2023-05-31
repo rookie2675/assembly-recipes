@@ -1,0 +1,34 @@
+﻿<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+    <ul class="navbar-nav flex-grow-1">
+        <!-- Home Button -->
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+        </li>
+
+        <!-- Recipe Button -->
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Recipe">Recipe</a>
+        </li>
+
+        <!-- Privacy Button -->
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+        <!-- Login/Logout Button -->
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-page="/Logout">Logout</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+            </li>
+        }
+    </ul>
+</div>
