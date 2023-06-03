@@ -1,6 +1,6 @@
-﻿namespace Services.Contracts
+﻿namespace Repositories.Contracts
 {
-    internal interface IRepository<TEntity>
+    public interface IRepository<TEntity>
     {
         List<TEntity> GetAll();
         TEntity Get(int id);
