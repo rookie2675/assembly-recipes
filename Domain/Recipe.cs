@@ -2,13 +2,15 @@
 {
     public class Recipe
     {
-        public ushort? Id { get; init; }
+        public short? Id { get; init; }
 
         public required string Name { get; set; }
 
         public string? Description { get; set; }
 
-        public string? ShortDescription { get; set; }
+        public required string ShortDescription { get; set; }
+
+        public required string ImageURL { get; set; }
 
         public List<string> Steps { get; init; }
 

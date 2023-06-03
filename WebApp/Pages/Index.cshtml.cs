@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain;
+
 using Microsoft.AspNetCore.Mvc.RazorPages;
+
+using Services.Contracts;
 
 namespace WebApp.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        private readonly IRecipeService _recipeService;
+
+        internal List<Recipe> Recipes { get; init; }
+
+        public IndexModel(IRecipeService recipeService)
         {
-            _logger = logger;
+            Recipes = new();
+            _recipeService = recipeService;
         }
 
-        public void OnGet()
-        {
-
-        }
+        public void OnGet() => _recipeService.GetRecipes();
     }
 }
