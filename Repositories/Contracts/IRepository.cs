@@ -2,10 +2,10 @@
 {
     public interface IRepository<TEntity>
     {
-        List<TEntity> GetAll();
-        TEntity Get(int id);
+        TEntity Find(long id);
+        List<TEntity> Find();
         TEntity Add(TEntity entity);
         TEntity Update(TEntity entity);
-        TEntity Delete(int id);
+        TEntity Delete(long id);
     }
 }
