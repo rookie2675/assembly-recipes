@@ -1,4 +1,6 @@
-﻿namespace Services.Contracts
+﻿using Domain;
+
+namespace Services.Contracts
 {
-    public interface IUserService { }
+    public interface IUserService : IEntityService<User> { }
 }

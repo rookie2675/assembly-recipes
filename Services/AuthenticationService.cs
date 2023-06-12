@@ -13,6 +13,6 @@ namespace Services
 
         public AuthenticationService(IUserRepository userRepository) =>_userRepository = userRepository;
 
-        public User? SignIn(string username, string password) => _userRepository.findByUsernameAndPassword(username, password);
+        public User? SignIn(string username, string password) => _userRepository.Find(username, password);
     }
 }

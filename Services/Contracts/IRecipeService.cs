@@ -1,6 +1,6 @@
-﻿namespace Services.Contracts
+﻿using Domain;
+
+namespace Services.Contracts
 {
-    public interface IRecipeService
-    {
-    }
+    public interface IRecipeService : IEntityService<Recipe> { }
 }
