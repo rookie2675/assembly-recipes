@@ -57,11 +57,15 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Scripts" />
+    <Folder Include="Scripts\CreateTables" />
+    <Folder Include="Scripts\PopulateTables" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Scripts\CreateUsersTable.sql" />
-    <Build Include="Scripts\CreateRecipesTable.sql" />
-    <Build Include="Scripts\CreateRecipeStepsTable.sql" />
-    <Build Include="Scripts\CreateRecipeIngredientsTable.sql" />
+    <Build Include="Scripts\CreateTables\CreateRecipeIngredientsTable.sql" />
+    <Build Include="Scripts\CreateTables\CreateRecipesTable.sql" />
+    <Build Include="Scripts\CreateTables\CreateRecipeStepsTable.sql" />
+    <Build Include="Scripts\CreateTables\CreateUsersTable.sql" />
+    <None Include="Scripts\PopulateTables\PopulateRecipesTable.sql" />
+    <None Include="Scripts\PopulateTables\PopulateStetpsTable.sql" />
   </ItemGroup>
 </Project>
