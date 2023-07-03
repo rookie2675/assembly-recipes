@@ -1,0 +1,63 @@
+﻿@page
+@model WebApp.Pages.RecipesModel
+
+@{
+    var recipes = Model.Recipes;
+    var pageSize = 9;
+    var totalPages = (int)Math.Ceiling((double)recipes.Count / pageSize);
+    var currentPage = Model.CurrentPage;
+    var startIndex = (currentPage - 1) * pageSize;
+    var endIndex = Math.Min(startIndex + pageSize, recipes.Count);
+}
+
+<h1>All Recipes</h1>
+
+<div class="row">
+    @foreach (var recipe in recipes.Skip(startIndex).Take(pageSize))
+    {
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+                <img src="@recipe.ImageURL" class="card-img-top" alt="@recipe.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@recipe.Name</h5>
+                    <p class="card-text">@recipe.ShortDescription</p>
+                    <a href="/Recipe?id=@recipe.Id" class="btn btn-primary">View Recipe</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="pagination-container">
+    @if (totalPages > 1)
+    {
+        <ul class="pagination">
+            @if (currentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Recipes?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="/Recipes?page=@(currentPage - 1)">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" href="/Recipes?page=@i">@i</a>
+                </li>
+            }
+
+            @if (currentPage < totalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Recipes?page=@(currentPage + 1)">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="/Recipes?page=@totalPages">Last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
