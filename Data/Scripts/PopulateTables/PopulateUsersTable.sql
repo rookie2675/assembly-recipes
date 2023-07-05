@@ -1,0 +1,22 @@
+INSERT INTO Users (Username, Password, Role)
+VALUES
+    ('john', 'password123', 'user'),
+    ('emma', 'securepass', 'user'),
+    ('admin', 'admin123', 'admin'),
+    ('moderator', 'modpass', 'admin'),
+    ('alice', 'pass123', 'user'),
+    ('bob', 'pass456', 'user'),
+    ('charlie', 'pass789', 'user'),
+    ('david', 'pass321', 'admin'),
+    ('emily', 'pass654', 'user'),
+    ('frank', 'pass987', 'admin'),
+    ('grace', 'pass135', 'user'),
+    ('henry', 'pass246', 'user'),
+    ('isabella', 'pass579', 'user'),
+    ('jack', 'pass864', 'admin'),
+    ('katherine', 'pass975', 'user'),
+    ('lucas', 'pass813', 'user'),
+    ('mia', 'pass725', 'user'),
+    ('nathan', 'pass462', 'admin'),
+    ('olivia', 'pass329', 'user'),
+    ('peter', 'pass594', 'admin');
