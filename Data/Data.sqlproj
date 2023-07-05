@@ -64,8 +64,9 @@
     <Build Include="Scripts\CreateTables\CreateRecipeIngredientsTable.sql" />
     <Build Include="Scripts\CreateTables\CreateRecipesTable.sql" />
     <Build Include="Scripts\CreateTables\CreateRecipeStepsTable.sql" />
-    <Build Include="Scripts\CreateTables\CreateUsersTable.sql" />
+    <None Include="Scripts\CreateTables\CreateUsersTable.sql" />
     <None Include="Scripts\PopulateTables\PopulateRecipesTable.sql" />
     <None Include="Scripts\PopulateTables\PopulateStetpsTable.sql" />
+    <Build Include="Scripts\PopulateTables\PopulateUsersTable.sql" />
   </ItemGroup>
 </Project>
