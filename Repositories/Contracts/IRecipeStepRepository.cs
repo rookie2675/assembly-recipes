@@ -1,7 +1,6 @@
-﻿namespace Repositories.Contracts
+﻿using Domain;
+
+namespace Repositories.Contracts
 {
-    public interface IRecipeStepRepository
-    {
-        List<string> Find(long id);
-    }
+    public interface IRecipeStepRepository : IManyToManyRepository<string, Recipe> { }
 }
