@@ -1,21 +1,10 @@
 using IoC;
-
-using Microsoft.Data.SqlClient;
 using Services.Contracts;
 
 namespace WebApp
 {
     public class Program
     {
-        private readonly IConfiguration _configuration;
-        private readonly ILogger<Program> _logger;
-
-        public Program(IConfiguration configuration, ILogger<Program> logger)
-        {
-            _configuration = configuration;
-            _logger = logger;
-        }
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +13,7 @@ namespace WebApp
             builder.Services.ConfigureWebAppServices();
             builder.Services.ConfigureWebAppRepositories(builder.Configuration);
 
-            builder.Logging.AddConsole(); // Add Console logger
+            builder.Logging.AddConsole();
 
             var app = builder.Build();
 
@@ -34,6 +23,12 @@ namespace WebApp
                 app.UseHsts();
             }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var initializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializerService>();
+                initializer.Initialize();
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -41,25 +36,17 @@ namespace WebApp
 
             app.UseAuthorization();
 
-            app.UseSession(); // Place app.UseSession() here before other middleware
+            app.UseSession();
 
             app.MapRazorPages();
 
-            // Configure the default page to be "Recipes"
-            app.UseEndpoints(endpoints =>
+            app.MapGet("/", context =>
             {
-                endpoints.MapRazorPages();
-                endpoints.MapGet("/", context =>
-                {
-                    context.Response.Redirect("/Recipes");
-                    return Task.CompletedTask;
-                });
+                context.Response.Redirect("/Recipes");
+                return Task.CompletedTask;
             });
-
-
-            DatabaseInitializer databaseInitializer = new DatabaseInitializer(app.Logger, app.Services.GetRequiredService<IUserService>(), app.Configuration);
-            databaseInitializer.Initialize();
 
             app.Run();
         }
+    }
 }
