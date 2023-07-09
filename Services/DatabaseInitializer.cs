@@ -1,22 +1,23 @@
 ﻿using Domain;
 
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 using Services.Contracts;
 
-namespace WebApp
+namespace Services
 {
-    public class DatabaseInitializer
+    public class DatabaseInitializer : IDatabaseInitializerService
     {
-        private readonly ILogger _logger;
+        // private readonly ILogger _logger;
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
 
         private static readonly string _scriptsFolderPath = @"C:\Users\Assembly\source\repos\roo-k13\Assembly Recipes\Data\Scripts";
 
-        public DatabaseInitializer(ILogger logger, IUserService userService, IConfiguration configuration)
+        public DatabaseInitializer(IUserService userService, IConfiguration configuration)
         {
-            _logger = logger;
+            // _logger = logger;
             _userService = userService;
             _configuration = configuration;
         }
@@ -47,7 +48,7 @@ namespace WebApp
 
             foreach (User user in users)
             {
-                _logger.LogInformation("Username: {Username}, Password: {Password}", user.Username, user.Password);
+                // _logger.LogInformation("Username: {Username}, Password: {Password}", user.Username, user.Password);
             }
         }
     }
