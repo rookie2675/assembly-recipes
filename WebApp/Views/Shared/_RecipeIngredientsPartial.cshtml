@@ -1,0 +1,11 @@
+﻿@model List<string>
+
+<h2>Ingredients:</h2>
+<ul class="list-group ingredient-list">
+
+    @foreach (var ingredient in Model)
+    {
+        <li class="list-group-item">@ingredient</li>
+    }
+
+</ul>

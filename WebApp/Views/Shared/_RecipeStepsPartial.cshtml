@@ -1,0 +1,11 @@
+﻿@model List<string>
+
+<h2>Steps:</h2>
+<ol class="list-group step-list">
+   
+    @foreach (var step in Model)
+    {
+        <li class="list-group-item">@step</li>
+    }
+
+</ol>
