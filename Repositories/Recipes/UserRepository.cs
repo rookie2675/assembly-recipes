@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 
 using Repositories.Contracts;
 
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace Repositories
@@ -14,20 +15,16 @@ namespace Repositories
 
         public UserRepository(string connectionString) => this.connectionString = connectionString;
 
-        public User? Find(long? id)
+        public User? Find(long id)
         {
-            if (id == null) throw new ArgumentNullException(nameof(id), "ID cannot be null.");
-
-
             if (id <= 0) throw new ArgumentException("ID must be a positive non-zero value.", nameof(id));
-
 
             using SqlConnection connection = new(connectionString);
             connection.Open();
 
             string query = "SELECT Id, Username, Password FROM Users WHERE Id = @Id";
 
-            using SqlCommand command = new SqlCommand(query, connection);
+            using SqlCommand command = new(query, connection);
             command.Parameters.AddWithValue("@Id", id);
 
             using SqlDataReader reader = command.ExecuteReader();
@@ -64,7 +61,7 @@ namespace Repositories
 
             if (reader.Read())
             {
-                ushort id = (ushort)reader["Id"];
+                long id = (long)reader["Id"];
                 string foundUsername = (string)reader["Username"];
                 string foundPassword = (string)reader["Password"];
 
@@ -89,11 +86,40 @@ namespace Repositories
 
             while (reader.Read())
             {
-                ushort id = (ushort)reader["Id"];
+                long id = (long)reader["Id"];
                 string username = (string)reader["Username"];
                 string password = (string)reader["Password"];
 
-                User user = new User { Id = id, Username = username, Password = password };
+                User user = new() { Id = id, Username = username, Password = password };
+                users.Add(user);
+            }
+
+            return users;
+        }
+
+        public List<User> Find(int count)
+        {
+            if (count <= 0)
+                throw new ArgumentException("Count must be a positive non-zero value.", nameof(count));
+
+            var users = new List<User>();
+
+            using SqlConnection connection = new(connectionString);
+            connection.Open();
+
+            string query = $"SELECT TOP {count} Id, Username, Password FROM Users";
+
+            using SqlCommand command = new(query, connection);
+
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                long id = (long)reader["Id"];
+                string username = (string)reader["Username"];
+                string password = (string)reader["Password"];
+
+                var user = new User { Id = id, Username = username, Password = password };
                 users.Add(user);
             }
 
@@ -102,23 +128,31 @@ namespace Repositories
 
         public User Add(User user)
         {
-            if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            if (user is null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
 
-            if (string.IsNullOrWhiteSpace(user.Username)) throw new ArgumentException("Username cannot be null or empty.", nameof(user.Username));
-             
-            if (string.IsNullOrWhiteSpace(user.Password)) throw new ArgumentException("Password cannot be null or empty.", nameof(user.Password));
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(user, serviceProvider: null, items: null);
+            bool isValid = Validator.TryValidateObject(user, validationContext, validationResults, validateAllProperties: true);
 
-            using SqlConnection connection = new(connectionString);
-            connection.Open();
+            if (!isValid)
+            {
+                string validationErrors = string.Join(Environment.NewLine, validationResults.Select(vr => vr.ErrorMessage));
+                throw new ArgumentException("User is not valid. Validation errors: " + validationErrors);
+            }
 
-            string query = "INSERT INTO Users (Username, Password) VALUES (@Username, @Password); SELECT SCOPE_IDENTITY();";
+            using (SqlConnection connection = new(connectionString))
+            {
+                connection.Open();
 
-            using SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Username", user.Username);
-            command.Parameters.AddWithValue("@Password", user.Password);
+                string query = "INSERT INTO Users (Username, Password) VALUES (@Username, @Password); SELECT SCOPE_IDENTITY();";
 
-            long id = Convert.ToInt64(command.ExecuteScalar());
-            user.Id = id;
+                using SqlCommand command = new(query, connection);
+                command.Parameters.AddWithValue("@Username", user.Username);
+                command.Parameters.AddWithValue("@Password", user.Password);
+
+                long id = Convert.ToInt64(command.ExecuteScalar());
+                user.Id = id;
+            }
 
             return user;
         }
