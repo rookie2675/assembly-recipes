@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using Repositories;
 using Repositories.Contracts;
+using Repositories.Recipes;
 
 namespace IoC
 {
@@ -24,6 +24,8 @@ namespace IoC
         {
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<IRecipeRepository, RecipeRepository>();
+            serviceCollection.AddScoped<IRecipeStepRepository, StepsRepository>();
+            serviceCollection.AddScoped<IIngredientRepository, IngredientsRepository>();
         }
     }
 }
