@@ -1,39 +1,34 @@
 ﻿using Domain;
-
 using Microsoft.Data.SqlClient;
-
-using Repositories.Contracts;
 
 namespace Repositories.Recipes
 {
-    public class StepsRepository : IRecipeStepRepository
+    public class StepsRepository : IStepsRepository
     {
         private readonly string connectionString;
 
         public StepsRepository(string connectionString) => this.connectionString = connectionString;
 
-        public IEnumerable<string> Find(Recipe recipe)
+        public List<string> Find(Recipe recipe)
         {
-            List<string> steps = new();
+            var ingredients = new List<string>();
 
-            using (SqlConnection connection = new(connectionString))
+            using var connection = new SqlConnection(connectionString);
+            connection.Open();
+
+            string query = "SELECT Ingredient FROM RecipeIngredients WHERE RecipeId = @RecipeId";
+
+            using var command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@RecipeId", recipe.Id);
+
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
             {
-                connection.Open();
-
-                string query = "SELECT Step FROM RecipeSteps WHERE RecipeId = @RecipeId";
-
-                using SqlCommand command = new(query, connection);
-                command.Parameters.AddWithValue("@RecipeId", recipe.Id);
-
-                using SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    string step = reader.GetString(0);
-                    steps.Add(step);
-                }
+                string ingredient = reader.GetString(0);
+                ingredients.Add(ingredient);
             }
 
-            return steps;
+            return ingredients;
         }
     }
 }
