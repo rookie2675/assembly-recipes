@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using DataAccess;
+using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Contracts;
 
@@ -11,20 +11,13 @@ namespace IoC
 
         private static void ConfigureCommon(this IServiceCollection serviceCollection)
         {
-            ConfigureLogging(serviceCollection);
-
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IRecipeService, RecipeService>();
             serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
             serviceCollection.AddScoped<IDatabaseInitializerService, DatabaseInitializer>();
+            serviceCollection.AddScoped<DatabaseHelper>();
 
             ConfigureSession(serviceCollection);
-        }
-
-        private static void ConfigureLogging(this IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddLogging(builder =>
-                builder.AddConsole());
         }
 
         private static void ConfigureSession(this IServiceCollection serviceCollection) 
