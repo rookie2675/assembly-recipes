@@ -1,8 +1,6 @@
 ﻿using Domain;
-
 using Microsoft.Data.SqlClient;
-
-using Repositories.Contracts;
+using Repositories.Recipes;
 
 namespace Repositories
 {
