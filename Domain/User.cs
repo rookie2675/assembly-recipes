@@ -12,6 +12,10 @@ namespace Domain
 
         [Required(ErrorMessage = "Password is required.")]
         [StringLength(100, ErrorMessage = "Password length must be between 1 and 100 characters.")]
-        public required string Password { get; set; }
+        public string? Password { get; set; }
+
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        public string? Email { get; set; }
     }
 }
