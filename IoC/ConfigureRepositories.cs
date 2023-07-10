@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
-using Repositories.Contracts;
 using Repositories.Recipes;
+using Repositories.Users;
 
 namespace IoC
 {
@@ -16,7 +16,6 @@ namespace IoC
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
 
             serviceCollection.AddSingleton(connectionString);
-
             serviceCollection.ConfigureCommonRepositories();
         }
 
