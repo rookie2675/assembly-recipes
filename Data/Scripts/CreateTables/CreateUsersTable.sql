@@ -6,7 +6,7 @@ GO
 -- Create the Users table
 CREATE TABLE Users
 (
-    Id SMALLINT IDENTITY(1,1) NOT NULL,
+    Id BIGINT IDENTITY(1, 1) NOT NULL,
     Username NVARCHAR(50) NOT NULL,
     Password NVARCHAR(100) NOT NULL,
     Role NVARCHAR(20) NOT NULL,
