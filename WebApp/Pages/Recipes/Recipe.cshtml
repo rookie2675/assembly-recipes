@@ -1,0 +1,46 @@
+﻿@page
+@model RecipeModel
+
+<html>
+<head>
+    <title>@(Model?.Recipe?.Name)</title> <!-- Sets the page title to the name of the recipe -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"> <!-- Adds a link to the Bootstrap CSS library -->
+</head>
+<body>
+    <div class="container-fluid">
+
+        <!-- Checks if the user is logged in -->
+        @if (Model.IsUserLoggedIn())
+        {
+            <partial name="_RecipeActionButtonsPartial" model="Model?.Recipe" /> <!-- Includes a partial view for recipe action buttons -->
+        }
+
+        <div class="row">
+            <div class="col-12">
+                <div class="recipe-details text-center">
+
+                    <!-- Displays the recipe name -->
+                    <h2>@(Model?.Recipe?.Name)</h2>
+
+                    <!-- Displays the recipe image -->
+                    <img src="~/images/@(Model?.Recipe?.ImageURL)" class="recipe-image mb-4" alt="@Model?.Recipe?.Name">
+
+                    <!-- Displays the recipe description -->
+                    <p class="recipe-description">@Model?.Recipe?.Description</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <partial name="_RecipeIngredientsPartial" model="Model?.Recipe?.Ingredients ?? new List<string>()" /> <!-- Includes a partial view for displaying recipe ingredients -->
+                        </div>
+                        <div class="col-md-6">
+                            <partial name="_RecipeStepsPartial" model="Model?.Recipe?.Steps ?? new List<string>()" /> <!-- Includes a partial view for displaying recipe steps -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> <!-- Adds a link to the Bootstrap JavaScript library -->
+</body>
+</html>
