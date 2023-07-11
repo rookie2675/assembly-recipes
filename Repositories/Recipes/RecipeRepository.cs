@@ -1,50 +1,37 @@
-﻿using Domain;
-
+﻿using DataAccess.Contracts;
+using Domain;
 using Microsoft.Data.SqlClient;
-
-using Repositories.Contracts;
-
-using System.Data;
+using Repositories.Recipes.Ingredients;
+using Repositories.Recipes.Steps;
 
 namespace Repositories.Recipes
 {
     public class RecipeRepository : IRecipeRepository
     {
-        private readonly string _connectionString;
-        private readonly IRecipeStepRepository _recipeStepRepository;
+        private readonly IDatabaseHelper _databaseHelper;
+        private readonly IStepsRepository _stepsRepository;
         private readonly IIngredientRepository _ingredientsRepository;
 
-        public RecipeRepository(string connectionString, IRecipeStepRepository recipeStepRepository, IIngredientRepository ingredientRepository)
+        public RecipeRepository(IDatabaseHelper databaseHelper,
+            IStepsRepository recipeStepRepository, IIngredientRepository ingredientRepository)
         {
-            _connectionString = connectionString;
-            _recipeStepRepository = recipeStepRepository;
+            _databaseHelper = databaseHelper;
+            _stepsRepository = recipeStepRepository;
             _ingredientsRepository = ingredientRepository;
         }
 
-        public Recipe? Find(long id)
+        public Recipe? FindById(long id)
         {
             string query = "SELECT Id, Name, Description, ShortDescription, ImageURL FROM Recipes WHERE Id = @Id";
-            SqlParameter parameter = new("@Id", id);
+            var parameter = new SqlParameter("@Id", id);
 
-            using SqlDataReader reader = ExecuteQuery(query, new[] { parameter });
+            using SqlDataReader reader = _databaseHelper.ExecuteQuery(query, parameter);
 
             if (reader.Read())
             {
-                string name = reader.GetString(1);
-                string description = reader.GetString(2);
-                string shortDescription = reader.GetString(3);
-                string imageURL = reader.GetString(4);
+                var recipe = CreateRecipeFromReader(reader);
 
-                Recipe recipe = new()
-                {
-                    Id = id,
-                    Name = name,
-                    Description = description,
-                    ShortDescription = shortDescription,
-                    ImageURL = imageURL,
-                };
-
-                foreach (string step in _recipeStepRepository.Find(recipe))
+                foreach (string step in _stepsRepository.Find(recipe))
                     recipe.AddStep(step);
 
                 foreach (string ingredient in _ingredientsRepository.Find(recipe))
@@ -56,36 +43,41 @@ namespace Repositories.Recipes
             return null;
         }
 
-        public List<Recipe> Find()
+        public List<Recipe> FindAll()
         {
             List<Recipe> recipes = new();
 
             string query = "SELECT Id, Name, Description, ShortDescription, ImageURL FROM Recipes";
 
-            using (SqlDataReader reader = ExecuteQuery(query, Array.Empty<SqlParameter>()))
+            using (SqlDataReader reader = _databaseHelper.ExecuteQuery(query))
             {
                 while (reader.Read())
                 {
-                    int id = reader.GetInt32(0);
-                    string name = reader.GetString(1);
-                    string description = reader.GetString(2);
-                    string shortDescription = reader.GetString(3);
-                    string imageURL = reader.GetString(4);
-
-                    Recipe recipe = new Recipe
-                    {
-                        Id = id,
-                        Name = name,
-                        Description = description,
-                        ShortDescription = shortDescription,
-                        ImageURL = imageURL
-                    };
-
+                    var recipe = CreateRecipeFromReader(reader);
                     recipes.Add(recipe);
                 }
             }
 
             return recipes;
+        }
+
+        public IEnumerable<Recipe> FindPage(int page, int size)
+        {
+            int skipCount = (page - 1) * size;
+
+            string query = "SELECT Id, Name, Description, ShortDescription, ImageURL FROM Recipes " +
+                           "ORDER BY Id OFFSET @Skip ROWS FETCH NEXT @Size ROWS ONLY";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@Skip", skipCount),
+                new SqlParameter("@Size", size)
+            };
+
+            using var reader = _databaseHelper.ExecuteQuery(query, parameters);
+
+            while (reader.Read())
+                yield return CreateRecipeFromReader(reader);
         }
 
         public Recipe Add(Recipe recipe)
@@ -101,7 +93,7 @@ namespace Repositories.Recipes
                 new SqlParameter("@ShortDescription", recipe.ShortDescription)
             };
 
-            recipe.Id = Convert.ToInt32(ExecuteScalar(query, parameters));
+            recipe.Id = Convert.ToInt32(_databaseHelper.ExecuteScalar<long>(query, parameters));
 
             return recipe;
         }
@@ -119,54 +111,50 @@ namespace Repositories.Recipes
                 new SqlParameter("@Id", recipe.Id)
             };
 
-            ExecuteNonQuery(query, parameters);
+            _databaseHelper.ExecuteNonQuery(query, parameters);
 
             return recipe;
         }
 
         public Recipe Delete(long id)
         {
-            Recipe? deletedRecipe = Find(id) ?? throw new InvalidOperationException("Recipe not found");
+            Recipe? deletedRecipe = FindById(id) ?? throw new InvalidOperationException("Recipe not found");
 
             string query = "DELETE FROM Recipes WHERE Id = @Id";
 
             SqlParameter parameter = new("@Id", id);
 
-            ExecuteNonQuery(query, new[] { parameter });
+            _databaseHelper.ExecuteNonQuery(query, parameter);
 
             return deletedRecipe;
         }
 
-        private SqlDataReader ExecuteQuery(string query, SqlParameter[] parameters)
+        private static Recipe CreateRecipeFromReader(SqlDataReader reader)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            connection.Open();
+            int id = reader.GetInt32(0);
+            string name = reader.GetString(1);
+            string description = reader.GetString(2);
+            string shortDescription = reader.GetString(3);
+            string imageURL = reader.GetString(4);
 
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddRange(parameters);
+            var recipe = new Recipe()
+            {
+                Id = id,
+                Name = name,
+                Description = description,
+                ShortDescription = shortDescription,
+                ImageURL = imageURL
+            };
 
-            return command.ExecuteReader();
+            return recipe;
         }
 
-        private void ExecuteNonQuery(string query, SqlParameter[] parameters)
+        public int GetTotalCount()
         {
-            using SqlConnection connection = new(_connectionString);
-            connection.Open();
+            string query = "SELECT COUNT(*) FROM Recipes";
+            int totalCount = _databaseHelper.ExecuteScalar<int>(query);
 
-            using SqlCommand command = new(query, connection);
-            command.Parameters.AddRange(parameters);
-
-            command.ExecuteNonQuery();
-        }
-
-        private object ExecuteScalar(string query, SqlParameter[] parameters)
-        {
-            using SqlConnection connection = new SqlConnection(_connectionString);
-            using SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddRange(parameters);
-
-            connection.Open();
-            return command.ExecuteScalar();
+            return totalCount;
         }
     }
 }

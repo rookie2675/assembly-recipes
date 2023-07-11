@@ -1,7 +1,9 @@
 ﻿using DataAccess;
+using DataAccess.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Contracts;
+using Services.Users;
 
 namespace IoC
 {
@@ -11,11 +13,12 @@ namespace IoC
 
         private static void ConfigureCommon(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<IDatabaseHelper, DatabaseHelper>();
+
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IRecipeService, RecipeService>();
             serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
             serviceCollection.AddScoped<IDatabaseInitializerService, DatabaseInitializer>();
-            serviceCollection.AddScoped<DatabaseHelper>();
 
             ConfigureSession(serviceCollection);
         }

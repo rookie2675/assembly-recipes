@@ -1,7 +1,7 @@
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services.Contracts;
+using Services.Users;
 
 namespace WebApp.Pages
 {
@@ -29,9 +29,7 @@ namespace WebApp.Pages
             user = _userService.Add(user);
 
             if (user is null)
-            {
                 ViewData["Message"] = "Registration failed. Please try again.";
-            }
 
             else
             {

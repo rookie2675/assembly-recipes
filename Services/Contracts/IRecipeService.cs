@@ -2,5 +2,8 @@
 
 namespace Services.Contracts
 {
-    public interface IRecipeService : IEntityService<Recipe> { }
+    public interface IRecipeService : IEntityService<Recipe>
+    {
+        int GetTotalCount();
+    }
 }

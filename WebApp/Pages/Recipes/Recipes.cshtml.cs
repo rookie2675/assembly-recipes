@@ -13,20 +13,16 @@ namespace WebApp.Pages.Recipes
         public int TotalPages { get; set; }
         public bool IsAuthenticated { get; set; }
 
-        public RecipesModel(IRecipeService recipeService)
-        {
-            _recipeService = recipeService;
-        }
+        public RecipesModel(IRecipeService recipeService) => _recipeService = recipeService;
 
         public void OnGet(int page)
         {
-            Recipes = _recipeService.Find();
-
             var pageSize = 9;
-            TotalPages = (int)Math.Ceiling((double)Recipes.ToList().Count / pageSize);
-            CurrentPage = page > 0 && page <= TotalPages ? page : 1;
+            CurrentPage = page > 0 ? page : 1;
 
-            Recipes = Recipes.Skip((CurrentPage - 1) * pageSize).Take(pageSize);
+            Recipes = _recipeService.GetPage(CurrentPage, pageSize);
+            int totalRecipes = _recipeService.GetTotalCount();
+            TotalPages = (int)Math.Ceiling((double)totalRecipes / pageSize);
         }
 
         public bool IsUserLoggedIn() => HttpContext.Session.GetInt32("UserId") is not null;

@@ -1,5 +1,4 @@
 ﻿using Domain;
-using PagedList;
 using Repositories.Users;
 
 namespace Services.Users
@@ -14,12 +13,12 @@ namespace Services.Users
 
         public List<User> GetAll() => _userRepository.FindAll();
 
+        public IEnumerable<User> GetPage(int page, int size) => _userRepository.FindPage(page, size);
+
         public User Add(User user) => _userRepository.Add(user);
 
         public User Update(User user) => _userRepository.Update(user);
 
         public User Delete(long id) => _userRepository.Delete(id);
-
-        public IPagedList<User> FindPaged(int page, int size) => _userRepository.FindPaged(page, size);
     }
 }

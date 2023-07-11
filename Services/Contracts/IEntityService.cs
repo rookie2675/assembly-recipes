@@ -1,11 +1,20 @@
-﻿namespace Services.Contracts
+﻿using Domain;
+using PagedList;
+
+namespace Services.Contracts
 {
     public interface IEntityService<T>
     {
-        T Find(long id);
-        List<T> Find();
+        T? GetById(long id);
+
+        List<T> GetAll();
+
+        IEnumerable<T> GetPage(int page, int size);
+
         T Add(T entity);
+
         T Update(T entity);
+
         T Delete(long id);
     }
 }

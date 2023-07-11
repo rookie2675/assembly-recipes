@@ -1,23 +1,22 @@
-﻿using Domain;
-
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-
+using Microsoft.Extensions.Logging;
 using Services.Contracts;
+using Services.Users;
 
 namespace Services
 {
     public class DatabaseInitializer : IDatabaseInitializerService
     {
-        // private readonly ILogger _logger;
+        private readonly ILogger _logger;
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
 
         private static readonly string _scriptsFolderPath = @"C:\Users\Assembly\source\repos\roo-k13\Assembly Recipes\Data\Scripts";
 
-        public DatabaseInitializer(IUserService userService, IConfiguration configuration)
+        public DatabaseInitializer(ILogger<DatabaseInitializer> logger, IUserService userService, IConfiguration configuration)
         {
-            // _logger = logger;
+            _logger = logger;
             _userService = userService;
             _configuration = configuration;
         }
@@ -44,12 +43,13 @@ namespace Services
 
         private void LogFirstFiveUsers()
         {
-            List<User> users = _userService.Find(5); // Retrieve the first 5 users
+            var users = _userService.GetPage(5, 1);
 
-            foreach (User user in users)
+            foreach (var user in users)
             {
-                // _logger.LogInformation("Username: {Username}, Password: {Password}", user.Username, user.Password);
+                _logger.LogInformation($"Username: {user.Username}, Password: {user.Password}");
             }
         }
+
     }
 }

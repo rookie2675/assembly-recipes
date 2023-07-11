@@ -1,14 +1,13 @@
 ﻿using Domain;
 using Microsoft.Data.SqlClient;
-using Repositories.Recipes;
 
-namespace Repositories
+namespace Repositories.Recipes.Ingredients
 {
-    public class IngredientsRepository : IIngredientRepository
+    public class RecipesIngredientsRepository : IIngredientRepository
     {
         private readonly string connectionString;
 
-        public IngredientsRepository(string connectionString) => this.connectionString = connectionString;
+        public RecipesIngredientsRepository(string connectionString) => this.connectionString = connectionString;
 
         public IEnumerable<string> Find(Recipe recipe)
         {

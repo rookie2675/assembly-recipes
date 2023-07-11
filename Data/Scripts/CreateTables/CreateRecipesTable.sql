@@ -4,7 +4,7 @@ GO
 
 CREATE TABLE Recipes
 (
-    Id INT IDENTITY(1, 1) PRIMARY KEY,
+    Id BIGINT IDENTITY(1, 1) PRIMARY KEY,
     Name NVARCHAR(100) NOT NULL,
     Description NVARCHAR(MAX),
     ShortDescription NVARCHAR(255),

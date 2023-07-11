@@ -11,6 +11,7 @@ namespace WebApp
 
             builder.Services.AddRazorPages();
             builder.Services.ConfigureWebAppServices();
+            builder.Services.ConfigureWebAppLogging();
             builder.Services.ConfigureWebAppRepositories(builder.Configuration);
 
             builder.Logging.AddConsole();
@@ -42,7 +43,7 @@ namespace WebApp
 
             app.MapGet("/", context =>
             {
-                context.Response.Redirect("/Recipes");
+                context.Response.Redirect("/Recipes/Recipes");
                 return Task.CompletedTask;
             });
 

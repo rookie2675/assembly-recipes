@@ -1,4 +1,8 @@
 ﻿<div class="mb-3">
     <a href="#" class="btn btn-primary">Edit Recipe</a>
-    <a href="#" class="btn btn-danger">Delete Recipe</a>
+    <form method="post" asp-controller="Recipe" asp-action="OnPostDelete">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Delete Recipe</button>
+    </form>
+
 </div>

@@ -18,7 +18,7 @@ namespace WebApp.Pages.Recipes
             if (id is null || id.Value == 0)
                 return BadRequest("Invalid Recipe ID");
 
-            Recipe = _recipeService.Find(id.Value);
+            Recipe = _recipeService.GetById(id.Value);
 
             if (Recipe == null)
                 return NotFound();
@@ -31,7 +31,7 @@ namespace WebApp.Pages.Recipes
             if (id is null || id.Value == 0)
                 return BadRequest("Invalid Recipe ID");
 
-            Recipe = _recipeService.Find(id.Value);
+            Recipe = _recipeService.GetById(id.Value);
 
             if (Recipe == null)
                 return NotFound();

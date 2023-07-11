@@ -36,7 +36,7 @@ namespace WebApp.Pages
             StoreUserIdInSession(account.Id ?? 0);
             LogConfirmationMessage();
 
-            return RedirectToPage("/Recipes");
+            return RedirectToPage("/Recipes/Recipes");
         }
 
         private bool AreCredentialsValid()
