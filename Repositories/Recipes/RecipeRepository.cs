@@ -49,7 +49,7 @@ namespace Repositories.Recipes
 
             string query = "SELECT Id, Name, Description, ShortDescription, ImageURL FROM Recipes";
 
-            using (SqlDataReader reader = _databaseHelper.ExecuteQuery(query))
+            using (var reader = _databaseHelper.ExecuteQuery(query))
             {
                 while (reader.Read())
                 {
