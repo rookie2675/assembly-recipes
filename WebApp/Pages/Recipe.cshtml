@@ -10,11 +10,15 @@
     <div class="container-fluid">
 
         <div class="mb-3">
-            <a href="#" class="btn btn-primary">Edit Recipe</a>
-            <form method="post" asp-controller="Recipe" asp-action="OnPostDelete">
-                <button type="submit" class="btn btn-danger">Delete Recipe</button>
-            </form>
+            @if (Request.Cookies["UserId"] != null)
+            {
+                <a href="#" class="btn btn-primary">Edit Recipe</a>
+                <form method="post" asp-controller="Recipe" asp-action="OnPostDelete">
+                    <button type="submit" class="btn btn-danger">Delete Recipe</button>
+                </form>
+            }
         </div>
+
 
         <div class="row">
             <div class="col-12">
@@ -32,7 +36,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <partial name="_RecipeIngredientsPartial" model="Model?.Recipe?.Ingredients ?? new List<string>()" /> <!-- Includes a partial view for displaying recipe ingredients -->
-                        </div>
+                        </div>  
                         <div class="col-md-6">
                             <partial name="_RecipeStepsPartial" model="Model?.Recipe?.Steps ?? new List<string>()" /> <!-- Includes a partial view for displaying recipe steps -->
                         </div>

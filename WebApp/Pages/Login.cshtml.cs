@@ -23,7 +23,8 @@ namespace WebApp.Pages
 
         public IActionResult OnPost()
         {
-            if (!AreCredentialsValid()) return Page();
+            if (!AreCredentialsValid())
+                return Page();
 
             var account = _authenticationService.SignIn(Username, Password);
 
@@ -33,10 +34,12 @@ namespace WebApp.Pages
                 return Page();
             }
 
-            StoreUserIdInSession(account.Id ?? 0);
+            if (account.Id.HasValue)
+                StoreAuthenticationCookie(account.Id.Value);
+
             LogConfirmationMessage();
 
-            return RedirectToPage("/Recipes/Recipes");
+            return RedirectToPage("/Recipes");
         }
 
         private bool AreCredentialsValid()
@@ -56,7 +59,18 @@ namespace WebApp.Pages
             return true;
         }
 
-        private void StoreUserIdInSession(long userId) => HttpContext.Session.SetInt32("UserId", (int)userId);
+        private void StoreAuthenticationCookie(long userId)
+        {
+            var options = new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddDays(7),
+                HttpOnly = true,
+                Secure = Request.IsHttps,
+                SameSite = SameSiteMode.Strict
+            };
+
+            Response.Cookies.Append("UserId", userId.ToString(), options);
+        }
 
         private void LogConfirmationMessage() => _logger.LogInformation("User {Username} logged in successfully.", Username);
     }
