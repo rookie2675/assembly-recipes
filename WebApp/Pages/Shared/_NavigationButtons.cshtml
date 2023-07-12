@@ -1,32 +1,25 @@
-﻿@functions {
-    private bool IsUserLoggedIn()
-    {
-        return Context.Session.GetInt32("UserId") != null;
-    }
-}
-
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
+﻿<nav class="navbar navbar-expand-sm navbar-dark bg-black">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-expanded="false" aria-controls="navbarNav">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-            @if (IsUserLoggedIn())
+            @if (User.Identity.IsAuthenticated)
             {
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-page="/Profile">Profile</a>
+                    <a class="nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
                 </li>
                 <li class="nav-item">
                     <form id="logoutForm" asp-page="/Logout" method="post" class="form-inline">
-                        <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                        <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
                     </form>
                 </li>
             }
             else
             {
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+                    <a class="nav-link text-light" asp-area="" asp-page="/Login">Login</a>
                 </li>
             }
         </ul>

@@ -55,62 +55,43 @@ namespace DataAccess
 
         public void ExecuteNonQuery(string query)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-            }
+            using SqlConnection connection = new(_connectionString);
+            using SqlCommand command = new(query, connection);
+            connection.Open();
+            command.ExecuteNonQuery();
         }
 
-        public T ExecuteScalar<T>(string query, SqlParameter[] parameters)
+        public T? ExecuteScalar<T>(string query, SqlParameter[] parameters)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    if (parameters != null)
-                    {
-                        // Filter out any null parameters before adding them to the command
-                        command.Parameters.AddRange(parameters.Where(p => p != null).ToArray());
-                    }
+            using SqlConnection connection = new(_connectionString);
+            using SqlCommand command = new(query, connection);
 
-                    connection.Open();
-                    var result = command.ExecuteScalar();
+            if (parameters != null)
+                command.Parameters.AddRange(parameters.Where(p => p != null).ToArray());
 
-                    // Convert the result to the specified type
-                    if (result != null && result != DBNull.Value)
-                    {
-                        return (T)Convert.ChangeType(result, typeof(T));
-                    }
-                    else
-                    {
-                        return default(T);
-                    }
-                }
-            }
+            connection.Open();
+            var result = command.ExecuteScalar();
+
+            if (result != null && result != DBNull.Value)
+                return (T)Convert.ChangeType(result, typeof(T));
+
+            return default;
         }
 
-        public T ExecuteScalar<T>(string query)
+        public T? ExecuteScalar<T>(string query)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    connection.Open();
-                    var result = command.ExecuteScalar();
+            using SqlConnection connection = new(_connectionString);
+            using SqlCommand command = new(query, connection);
+            connection.Open();
+            var result = command.ExecuteScalar();
 
-                    if (result != null && result != DBNull.Value)
-                    {
-                        return (T)Convert.ChangeType(result, typeof(T));
-                    }
-                    else
-                    {
-                        return default(T);
-                    }
-                }
+            if (result != null && result != DBNull.Value)
+            {
+                return (T)Convert.ChangeType(result, typeof(T));
+            }
+            else
+            {
+                return default;
             }
         }
 

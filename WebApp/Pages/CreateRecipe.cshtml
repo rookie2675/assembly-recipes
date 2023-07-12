@@ -1,5 +1,5 @@
 ﻿@page
-@model WebApp.Pages.Recipes.CreateRecipeModel
+@model WebApp.Pages.CreateRecipeModel
 
 <h1>Create New Recipe</h1>
 
@@ -28,7 +28,8 @@
     <div class="form-group" id="ingredientContainer">
         <input type="text" name="Ingredients" class="form-control" required />
     </div>
-    <button type="button" class="btn btn-secondary" onclick="addIngredient()">Add Ingredient</button>
+
+    <button type="button" class="btn btn-secondary" onclick="addStep()">Add Ingredient</button>
 
     <h3>Steps:</h3>
     <div class="form-group" id="stepContainer">
@@ -38,24 +39,3 @@
 
     <button type="submit" class="btn btn-primary">Create Recipe</button>
 </form>
-
-@section Scripts {
-    <script>
-        var ingredientContainer = document.getElementById('ingredientContainer');
-        var stepContainer = document.getElementById('stepContainer');
-
-        function addIngredient() {
-            var ingredientInput = document.createElement('div');
-            ingredientInput.className = 'form-group';
-            ingredientInput.innerHTML = '<input type="text" name="Ingredients" class="form-control" required />';
-            ingredientContainer.appendChild(ingredientInput);
-        }
-
-        function addStep() {
-            var stepInput = document.createElement('div');
-            stepInput.className = 'form-group';
-            stepInput.innerHTML = '<input type="text" name="Steps" class="form-control" required />';
-            stepContainer.appendChild(stepInput);
-        }
-    </script>
-}

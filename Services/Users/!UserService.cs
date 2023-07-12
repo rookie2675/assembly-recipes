@@ -1,5 +1,4 @@
 ﻿using Domain;
-using PagedList;
 using Services.Contracts;
 
 namespace Services.Users

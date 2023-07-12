@@ -1,6 +1,4 @@
-﻿using PagedList;
-
-namespace Repositories.Contracts
+﻿namespace Repositories.Contracts
 {
     public interface IRepository<E>
     {

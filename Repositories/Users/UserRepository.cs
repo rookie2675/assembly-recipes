@@ -1,9 +1,6 @@
-﻿using DataAccess;
-using DataAccess.Contracts;
+﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
-using PagedList;
-using Repositories.Contracts;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 
@@ -73,7 +70,7 @@ namespace Repositories.Users
             return ReadUsersFromReader(reader);
         }
 
-        public IEnumerable<User> FindPaged(int page, int pageSize)
+        public IEnumerable<User> FindPage(int page, int pageSize)
         {
             if (page <= 0)
                 throw new ArgumentException("Page must be a positive non-zero value.", nameof(page));
@@ -101,28 +98,20 @@ namespace Repositories.Users
 
             var users = ReadUsersFromReader(reader);
 
-            return new StaticPagedList<User>(users, page, pageSize, totalCount);
+            return users;
         }
 
         public User Add(User user)
         {
             if (user is null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
 
-            var validationResults = new List<ValidationResult>();
-            var validationContext = new ValidationContext(user, serviceProvider: null, items: null);
-            bool isValid = Validator.TryValidateObject(user, validationContext, validationResults, validateAllProperties: true);
-
-            if (!isValid)
-            {
-                string validationErrors = string.Join(Environment.NewLine, validationResults.Select(vr => vr.ErrorMessage));
-                throw new ArgumentException("User is not valid. Validation errors: " + validationErrors);
-            }
-
-            string query = "INSERT INTO Users (Username, Password) VALUES (@Username, @Password); SELECT SCOPE_IDENTITY();";
+            string query = "INSERT INTO Users (Username, Password, Role, Email) VALUES (@Username, @Password, @Role, @Email); SELECT SCOPE_IDENTITY();";
             SqlParameter[] parameters =
             {
                 new SqlParameter("@Username", user.Username),
-                new SqlParameter("@Password", user.Password)
+                new SqlParameter("@Password", user.Password),
+                new SqlParameter("@Role", "user"),
+                new SqlParameter("@Email", user.Email)
             };
 
             long id = Convert.ToInt64(_databaseHelper.ExecuteScalar<long>(query, parameters));
@@ -131,7 +120,7 @@ namespace Repositories.Users
             return user;
         }
 
-        public User? Update(User user)
+        public User Update(User user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
 
@@ -191,16 +180,6 @@ namespace Repositories.Users
             }
 
             return users;
-        }
-
-        public IPagedList<User> FindPage()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IPagedList<User> FindPage(int page, int size)
-        {
-            throw new NotImplementedException();
         }
 
         public int GetTotalCount()

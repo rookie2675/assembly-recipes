@@ -7,13 +7,13 @@
 
         public long? Id { get; set; }
 
-        public required string Name { get; set; }
+        public string? Name { get; set; }
 
         public string? Description { get; set; }
 
-        public required string ShortDescription { get; set; }
+        public string? ShortDescription { get; set; }
 
-        public required string ImageURL { get; set; }
+        public string? ImageURL { get; set; }
 
         public IReadOnlyList<string> Steps => _steps;
 

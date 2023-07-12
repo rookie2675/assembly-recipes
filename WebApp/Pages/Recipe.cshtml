@@ -9,11 +9,12 @@
 <body>
     <div class="container-fluid">
 
-        <!-- Checks if the user is logged in -->
-        @if (Model.IsUserLoggedIn())
-        {
-            <partial name="_RecipeActionButtonsPartial" model="Model?.Recipe" /> <!-- Includes a partial view for recipe action buttons -->
-        }
+        <div class="mb-3">
+            <a href="#" class="btn btn-primary">Edit Recipe</a>
+            <form method="post" asp-controller="Recipe" asp-action="OnPostDelete">
+                <button type="submit" class="btn btn-danger">Delete Recipe</button>
+            </form>
+        </div>
 
         <div class="row">
             <div class="col-12">

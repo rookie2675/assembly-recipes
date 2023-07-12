@@ -8,9 +8,9 @@ namespace DataAccess.Contracts
 
         void ExecuteNonQuery(string query, SqlParameter parameter);
 
-        public T ExecuteScalar<T>(string query, SqlParameter[] parameters);
+        public T? ExecuteScalar<T>(string query, SqlParameter[] parameters);
 
-        public T ExecuteScalar<T>(string query);
+        public T? ExecuteScalar<T>(string query);
 
         SqlDataReader ExecuteQuery(string query, SqlParameter[] parameters);
 

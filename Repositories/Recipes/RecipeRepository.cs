@@ -25,7 +25,7 @@ namespace Repositories.Recipes
             string query = "SELECT Id, Name, Description, ShortDescription, ImageURL FROM Recipes WHERE Id = @Id";
             var parameter = new SqlParameter("@Id", id);
 
-            using SqlDataReader reader = _databaseHelper.ExecuteQuery(query, parameter);
+            using var reader = _databaseHelper.ExecuteQuery(query, parameter);
 
             if (reader.Read())
             {
@@ -45,7 +45,7 @@ namespace Repositories.Recipes
 
         public List<Recipe> FindAll()
         {
-            List<Recipe> recipes = new();
+            var recipes = new List<Recipe>();
 
             string query = "SELECT Id, Name, Description, ShortDescription, ImageURL FROM Recipes";
 
@@ -118,7 +118,7 @@ namespace Repositories.Recipes
 
         public Recipe Delete(long id)
         {
-            Recipe? deletedRecipe = FindById(id) ?? throw new InvalidOperationException("Recipe not found");
+            var deletedRecipe = FindById(id) ?? throw new InvalidOperationException("Recipe not found");
 
             string query = "DELETE FROM Recipes WHERE Id = @Id";
 

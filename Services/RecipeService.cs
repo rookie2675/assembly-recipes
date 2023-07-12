@@ -1,5 +1,4 @@
 ﻿using Domain;
-using PagedList;
 using Repositories.Recipes;
 using Services.Contracts;
 
@@ -11,7 +10,7 @@ namespace Services
 
         public RecipeService(IRecipeRepository recipeRepository) => _recipeRepository = recipeRepository;
 
-        public Recipe GetById(long id) => _recipeRepository.FindById(id);
+        public Recipe? GetById(long id) => _recipeRepository.FindById(id);
 
         public List<Recipe> GetAll() => _recipeRepository.FindAll();
 

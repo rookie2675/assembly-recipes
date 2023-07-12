@@ -18,7 +18,6 @@ namespace IoC
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IRecipeService, RecipeService>();
             serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
-            serviceCollection.AddScoped<IDatabaseInitializerService, DatabaseInitializer>();
         }
     }
 }
