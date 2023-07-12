@@ -25,23 +25,14 @@ namespace WebApp.Pages
 
             return Page();
         }
-
-        public IActionResult OnPostDelete(long? id)
+        public IActionResult OnPostDelete(Recipe recipe)
         {
-            if (id is null || id.Value == 0)
-                return BadRequest("Invalid Recipe ID");
+            if (recipe == null || recipe.Id == null || recipe.Id.Value == 0)
+                return BadRequest("Invalid Recipe");
 
-            if (Recipe == null)
-                return NotFound();
+            _recipeService.Delete(recipe.Id.Value);
 
-            if (Recipe.Id is not null)
-            {
-
-            }
-
-            _recipeService.Delete(Recipe.Id.Value);
-
-            return RedirectToPage("/Recipes/Recipes");
+            return RedirectToPage("/Recipes");
         }
     }
 }

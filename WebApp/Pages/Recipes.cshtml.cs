@@ -33,7 +33,7 @@ namespace WebApp.Pages
             Recipes = _recipeService.GetPage(CurrentPage, pageSize);
         }
 
-        private int CalculateTotalPages(int totalItems, int pageSize)
+        private static int CalculateTotalPages(int totalItems, int pageSize)
         {
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
             return totalPages > 0 ? totalPages : 1;
