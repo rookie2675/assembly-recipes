@@ -4,11 +4,11 @@ using System.Data;
 
 namespace DataAccess
 {
-    public class DatabaseHelper : IDatabaseHelper
+    public class SqlQueryExecutor : ISqlQueryExecutor
     {
         private readonly string _connectionString;
 
-        public DatabaseHelper(string connectionString) => _connectionString = connectionString;
+        public SqlQueryExecutor(string connectionString) => _connectionString = connectionString;
 
         public SqlDataReader ExecuteQuery(string query, SqlParameter[] parameters)
         {

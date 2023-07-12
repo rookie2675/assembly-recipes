@@ -2,7 +2,7 @@
 
 namespace DataAccess.Contracts
 {
-    public interface IDatabaseHelper
+    public interface ISqlQueryExecutor
     {
         SqlDataReader ExecuteQuery(string query, SqlParameter[] parameters);
 
