@@ -53,6 +53,17 @@ namespace DataAccess
             command.ExecuteNonQuery();
         }
 
+        public void ExecuteNonQuery(string query, SqlParameter parameter)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+
+            using var command = new SqlCommand(query, connection);
+            command.Parameters.Add(parameter);
+            command.ExecuteNonQuery();
+        }
+
+
         public void ExecuteNonQuery(string query)
         {
             using SqlConnection connection = new(_connectionString);
@@ -86,18 +97,9 @@ namespace DataAccess
             var result = command.ExecuteScalar();
 
             if (result != null && result != DBNull.Value)
-            {
                 return (T)Convert.ChangeType(result, typeof(T));
-            }
-            else
-            {
-                return default;
-            }
-        }
 
-        public void ExecuteNonQuery(string query, SqlParameter parameter)
-        {
-            throw new NotImplementedException();
+            return default;
         }
     }
 }
