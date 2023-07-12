@@ -7,7 +7,6 @@ namespace IoC
 {
     public static class DatabaseConfiguration
     {
-
         public static void ConfigureDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             ConfigureConnectionString(serviceCollection, configuration);
