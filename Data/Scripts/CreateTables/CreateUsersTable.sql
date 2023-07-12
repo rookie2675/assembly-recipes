@@ -1,7 +1,3 @@
-IF OBJECT_ID('Users', 'U') IS NOT NULL
-    DROP TABLE Users;
-GO
-
 CREATE TABLE Users
 (
     Id BIGINT IDENTITY(1, 1) NOT NULL,
