@@ -13,10 +13,11 @@ namespace WebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
-            services.ConfigureWebAppServices();
-            services.ConfigureWebAppRepositories(Configuration);
             services.AddLogging();
+            services.AddRazorPages();
+            services.ConfigureServices();
+            services.ConfigureDatabase(Configuration);
+            services.ConfigureRepositories();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
