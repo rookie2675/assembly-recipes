@@ -19,17 +19,6 @@ namespace IoC
             serviceCollection.AddScoped<IRecipeService, RecipeService>();
             serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
             serviceCollection.AddScoped<IDatabaseInitializerService, DatabaseInitializer>();
-
-            ConfigureSession(serviceCollection);
-        }
-
-        private static void ConfigureSession(this IServiceCollection serviceCollection) 
-        {
-            serviceCollection.AddSession(options =>
-            {
-                options.Cookie.Name = "YourSessionCookieName";
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-            });
         }
     }
 }
