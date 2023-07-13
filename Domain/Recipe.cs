@@ -2,8 +2,8 @@
 {
     public class Recipe
     {
-        private readonly List<string> _steps;
-        private readonly List<string> _ingredients;
+        private readonly List<Step> _steps;
+        private readonly List<Ingredient> _ingredients;
 
         public long? Id { get; set; }
 
@@ -15,9 +15,9 @@
 
         public string? ImageURL { get; set; }
 
-        public IReadOnlyList<string> Steps => _steps;
+        public IReadOnlyList<Step> Steps => _steps;
 
-        public IReadOnlyList<string> Ingredients => _ingredients;
+        public IReadOnlyList<Ingredient> Ingredients => _ingredients;
 
         public Recipe()
         {
@@ -26,16 +26,18 @@
         }
 
 
-        public void AddIngredient(string ingredient)
+        public void AddIngredient(Ingredient ingredient)
         {
-            if (string.IsNullOrWhiteSpace(ingredient)) throw new ArgumentException("Ingredient cannot be null or empty.", nameof(ingredient));
+            if (ingredient is null)
+                throw new ArgumentNullException(nameof(ingredient));
 
             _ingredients.Add(ingredient);
         }
 
-        public void AddStep(string step)
+        public void AddStep(Step step)
         {
-            if (string.IsNullOrWhiteSpace(step)) throw new ArgumentException("Step cannot be null or empty.", nameof(step));
+            if (step is null) 
+                throw new ArgumentNullException(nameof(step));
 
             _steps.Add(step);
         }
