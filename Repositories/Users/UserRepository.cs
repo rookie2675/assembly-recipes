@@ -9,9 +9,9 @@ namespace Repositories.Users
     public class UserRepository : IUserRepository
     {
         private readonly string _connectionString;
-        private readonly IDatabaseHelper _databaseHelper;
+        private readonly ISqlQueryExecutor _databaseHelper;
 
-        public UserRepository(string connectionString, IDatabaseHelper databaseHelper)
+        public UserRepository(string connectionString, ISqlQueryExecutor databaseHelper)
         {
             _connectionString = connectionString;
             _databaseHelper = databaseHelper;

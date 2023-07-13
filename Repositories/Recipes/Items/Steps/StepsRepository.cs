@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Microsoft.Data.SqlClient;
 
-namespace Repositories.Recipes.Steps
+namespace Repositories.Recipes.Items.Steps
 {
     public class StepsRepository : IStepsRepository
     {

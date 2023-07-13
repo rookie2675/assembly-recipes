@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Repositories.Recipes;
-using Repositories.Recipes.Ingredients;
-using Repositories.Recipes.Steps;
+using Repositories.Recipes.Items.Ingredients;
+using Repositories.Recipes.Items.Steps;
 using Repositories.Users;
 
 namespace IoC
@@ -13,7 +13,7 @@ namespace IoC
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<IStepsRepository, StepsRepository>();
             serviceCollection.AddScoped<IRecipeRepository, RecipeRepository>();
-            serviceCollection.AddScoped<IIngredientRepository, RecipesIngredientsRepository>();
+            serviceCollection.AddScoped<IIngredientRepository, IngredientsRepository>();
         }
     }
 }

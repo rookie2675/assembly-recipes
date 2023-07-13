@@ -1,18 +1,18 @@
 ﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
-using Repositories.Recipes.Ingredients;
-using Repositories.Recipes.Steps;
+using Repositories.Recipes.Items.Ingredients;
+using Repositories.Recipes.Items.Steps;
 
 namespace Repositories.Recipes
 {
     public class RecipeRepository : IRecipeRepository
     {
-        private readonly IDatabaseHelper _databaseHelper;
+        private readonly ISqlQueryExecutor _databaseHelper;
         private readonly IStepsRepository _stepsRepository;
         private readonly IIngredientRepository _ingredientsRepository;
 
-        public RecipeRepository(IDatabaseHelper databaseHelper,
+        public RecipeRepository(ISqlQueryExecutor databaseHelper,
             IStepsRepository recipeStepRepository, IIngredientRepository ingredientRepository)
         {
             _databaseHelper = databaseHelper;
