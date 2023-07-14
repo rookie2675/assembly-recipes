@@ -1,34 +1,72 @@
-﻿using Domain;
+﻿using DataAccess.Contracts;
+using Domain;
 using Microsoft.Data.SqlClient;
 
 namespace Repositories.Recipes.Items.Steps
 {
     public class StepsRepository : IStepsRepository
     {
-        private readonly string connectionString;
+        private readonly ISqlQueryExecutor _queryExecutor;
 
-        public StepsRepository(string connectionString) => this.connectionString = connectionString;
+        public StepsRepository(ISqlQueryExecutor queryExecutor) => _queryExecutor = queryExecutor;
 
-        public List<string> Find(Recipe recipe)
+        public ICollection<Step> FindAllByRecipe(Recipe recipe)
         {
-            var ingredients = new List<string>();
+            string query = "SELECT StepId, Description FROM RecipeSteps WHERE RecipeId = @RecipeId";
+            var parameter = new SqlParameter("@RecipeId", recipe.Id);
 
-            using var connection = new SqlConnection(connectionString);
-            connection.Open();
+            var steps = new List<Step>();
 
-            string query = "SELECT Ingredient FROM RecipeIngredients WHERE RecipeId = @RecipeId";
-
-            using var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@RecipeId", recipe.Id);
-
-            using var reader = command.ExecuteReader();
+            using SqlDataReader reader = _queryExecutor.ExecuteQuery(query, parameter);
             while (reader.Read())
             {
-                string ingredient = reader.GetString(0);
-                ingredients.Add(ingredient);
+                var step = new Step
+                {
+                    Id = reader.GetInt64(0),
+                    Description = reader.GetString(1)
+                };
+                steps.Add(step); // Add the step to the collection
             }
 
-            return ingredients;
+            return steps; // Return the collection of steps
+        }
+
+        public void Add(Recipe recipe, Step step)
+        {
+            string query = "INSERT INTO RecipeSteps (RecipeId, StepId, Description) VALUES (@RecipeId, @StepId, @Description)";
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@RecipeId", recipe.Id),
+                new SqlParameter("@StepId", step.Id),
+                new SqlParameter("@Description", step.Description)
+            };
+
+            _queryExecutor.ExecuteNonQuery(query, parameters);
+        }
+
+        public void Update(Recipe recipe, Step step)
+        {
+            string query = "UPDATE RecipeSteps SET Description = @Description WHERE RecipeId = @RecipeId AND StepId = @StepId";
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@RecipeId", recipe.Id),
+                new SqlParameter("@StepId", step.Id),
+                new SqlParameter("@Description", step.Description)
+            };
+
+            _queryExecutor.ExecuteNonQuery(query, parameters);
+        }
+
+        public void Delete(Recipe recipe, Step step)
+        {
+            string query = "DELETE FROM RecipeSteps WHERE RecipeId = @RecipeId AND StepId = @StepId";
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@RecipeId", recipe.Id),
+                new SqlParameter("@StepId", step.Id)
+            };
+
+            _queryExecutor.ExecuteNonQuery(query, parameters);
         }
     }
 }

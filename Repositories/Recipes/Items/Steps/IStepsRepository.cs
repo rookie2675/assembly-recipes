@@ -1,4 +1,6 @@
-﻿namespace Repositories.Recipes.Items.Steps
+﻿using Domain;
+
+namespace Repositories.Recipes.Items.Steps
 {
-    public interface IStepsRepository : IRecipeItemRepository<string> { }
+    public interface IStepsRepository : IRecipeItemRepository<Step> { }
 }
