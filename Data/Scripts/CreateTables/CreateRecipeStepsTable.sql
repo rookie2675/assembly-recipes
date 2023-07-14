@@ -1,6 +1,8 @@
 CREATE TABLE RecipeSteps
 (
-    RecipeId BIGINT,
-    Step NVARCHAR(MAX) NOT NULL,
+    StepId BIGINT IDENTITY(1,1) NOT NULL,
+    RecipeId BIGINT NOT NULL,
+    Description NVARCHAR(MAX) NOT NULL,
+    CONSTRAINT PK_RecipeSteps PRIMARY KEY (StepId),
     CONSTRAINT FK_RecipeSteps_Recipes FOREIGN KEY (RecipeId) REFERENCES Recipes(Id) ON DELETE CASCADE
-);  
+);

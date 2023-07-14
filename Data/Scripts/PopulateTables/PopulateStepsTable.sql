@@ -1,5 +1,5 @@
 -- Bacalhau à Brás Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (1, 'Desfie o bacalhau em lascas finas.'),
     (1, 'Numa frigideira, aqueça o azeite e refogue a cebola e o alho.'),
@@ -9,7 +9,7 @@ VALUES
 GO
 
 -- Francesinha Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (2, 'Preaqueça o forno a 180°C.'),
     (2, 'Numa frigideira, frite as linguiças e as salsichas frescas até ficarem douradas.'),
@@ -23,7 +23,7 @@ VALUES
 GO
 
 -- Pastel de Nata Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (3, 'Preaqueça o forno a 220°C.'),
     (3, 'Abra a massa folhada em uma superfície enfarinhada.'),
@@ -37,7 +37,7 @@ VALUES
 GO
 
 -- Caldo Verde Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (4, 'Em uma panela, coloque as batatas e cubra com água.'),
     (4, 'Cozinhe em fogo médio até as batatas ficarem macias.'),
@@ -52,7 +52,7 @@ VALUES
 GO
 
 -- Arroz de Pato Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (5, 'Cozinhe o pato em água com sal até ficar macio.'),
     (5, 'Retire o pato da água, desfie a carne e reserve.'),
@@ -67,7 +67,7 @@ VALUES
 GO
 
 -- Polvo à Lagareiro Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (6, 'Pré-aqueça o forno a 200°C.'),
     (6, 'Cozinhe o polvo em água com sal até ficar macio.'),
@@ -82,7 +82,7 @@ VALUES
 GO
 
 -- Cozido à Portuguesa Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (7, 'Em uma panela grande, coloque água e leve ao fogo alto.'),
     (7, 'Adicione as carnes variadas (porco, vaca, frango), chouriço e enchidos.'),
@@ -94,7 +94,7 @@ VALUES
 GO
 
 -- Bolo de Bolacha Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (8, 'Prepare o café forte e deixe esfriar.'),
     (8, 'Num prato fundo, mergulhe rapidamente as bolachas no café e coloque-as no fundo de uma forma retangular.'),
@@ -110,7 +110,7 @@ VALUES
 GO
 
 -- Arroz de Marisco Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (9, 'Em uma panela grande, aqueça azeite e refogue a cebola e o alho até ficarem dourados.'),
     (9, 'Adicione os tomates picados e cozinhe por alguns minutos até amolecerem.'),
@@ -124,7 +124,7 @@ VALUES
 GO
 
 -- Queijadas de Sintra Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (10, 'Pré-aqueça o forno a 180°C.'),
     (10, 'Em uma tigela, misture o queijo fresco, os ovos, o açúcar e a farinha de trigo até obter uma massa homogênea.'),
@@ -138,7 +138,7 @@ VALUES
 GO
 
     -- Arroz de Pato Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (11, 'Cozinhe o pato em água com sal até ficar macio.'),
     (11, 'Retire o pato da água e desfie a carne.'),
@@ -153,7 +153,7 @@ VALUES
 GO
 
 -- Arroz Doce Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (12, 'Em uma panela, coloque o arroz e água suficiente para cobri-lo.'),
     (12, 'Cozinhe o arroz em fogo baixo até ficar macio e a água ser absorvida.'),
@@ -168,7 +168,7 @@ VALUES
 GO
 
 -- Cataplana de Marisco Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (13, 'Em uma cataplana (ou panela grande com tampa), aqueça o azeite.'),
     (13, 'Refogue a cebola e o alho até dourarem.'),
@@ -181,7 +181,7 @@ VALUES
 GO
 
 -- Pudim Abade de Priscos Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (14, 'Pré-aqueça o forno a 180°C.'),
     (14, 'Em uma tigela, misture o açúcar com a água e leve ao fogo até formar uma calda em ponto de fio.'),
@@ -196,7 +196,7 @@ VALUES
 GO
 
 -- Bifanas à Moda do Porto Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (15, 'Tempere as bifanas com sal, pimenta, alho picado e vinho branco.'),
     (15, 'Deixe marinar por pelo menos 30 minutos.'),
@@ -211,7 +211,7 @@ VALUES
 GO
 
 -- Arroz de Marisco Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (16, 'Em uma panela grande, aqueça o azeite.'),
     (16, 'Refogue a cebola e o alho até dourarem.'),
@@ -229,7 +229,7 @@ VALUES
 GO
 
 -- Queijadas de Sintra Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (17, 'Pré-aqueça o forno a 180°C.'),
     (17, 'Forre as formas para queijadas com a massa folhada.'),
@@ -243,7 +243,7 @@ VALUES
 GO
 
 -- Pastéis de Bacalhau Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (18, 'Coloque o bacalhau em uma panela com água e leve ao fogo médio para cozinhar até ficar macio.'),
     (18, 'Escorra o bacalhau, retire a pele e as espinhas e desfie a carne.'),
@@ -257,7 +257,7 @@ VALUES
 GO
 
 -- Pudim Molotov Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (19, 'Pré-aqueça o forno a 180°C.'),
     (19, 'Bata as claras em neve bem firme.'),
@@ -271,7 +271,7 @@ VALUES
 GO
 
 -- Arroz Doce Steps
-INSERT INTO RecipeSteps (RecipeId, Step)
+INSERT INTO RecipeSteps (RecipeId, Description)
 VALUES
     (20, 'Em uma panela, leve ao fogo o leite com o arroz e a casca de limão, mexendo ocasionalmente.'),
     (20, 'Quando o arroz estiver cozido e o leite tiver reduzido, adicione o açúcar e mexa bem até dissolver completamente.'),
