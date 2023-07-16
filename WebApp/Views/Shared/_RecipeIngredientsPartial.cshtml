@@ -1,11 +1,12 @@
-﻿@model List<string>
+﻿@using Domain;
+@model List<Ingredient>
 
 <h2>Ingredients:</h2>
 <ul class="list-group ingredient-list">
 
     @foreach (var ingredient in Model)
     {
-        <li class="list-group-item">@ingredient</li>
+        <li class="list-group-item">@ingredient.Name</li>
     }
 
 </ul>

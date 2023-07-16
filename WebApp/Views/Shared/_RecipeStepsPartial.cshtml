@@ -1,11 +1,12 @@
-﻿@model List<string>
+﻿@using Domain;
+@model List<Step>
 
 <h2>Steps:</h2>
 <ol class="list-group step-list">
    
     @foreach (var step in Model)
     {
-        <li class="list-group-item">@step</li>
+        <li class="list-group-item">@step.Description</li>
     }
 
 </ol>

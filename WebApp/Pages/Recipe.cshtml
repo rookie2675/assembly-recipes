@@ -1,4 +1,5 @@
 ﻿@page
+@using Domain;
 @model RecipeModel
 
 <html>
@@ -34,12 +35,15 @@
                     <p class="recipe-description">@Model?.Recipe?.Description</p>
 
                     <div class="row">
+
                         <div class="col-md-6">
-                            <partial name="_RecipeIngredientsPartial" model="Model?.Recipe?.Ingredients ?? new List<string>()" /> <!-- Includes a partial view for displaying recipe ingredients -->
-                        </div>  
-                        <div class="col-md-6">
-                            <partial name="_RecipeStepsPartial" model="Model?.Recipe?.Steps ?? new List<string>()" /> <!-- Includes a partial view for displaying recipe steps -->
+                            <partial name="_RecipeStepsPartial" model="Model?.Recipe?.Steps ?? new List<Step>()" /> <!-- Includes a partial view for displaying recipe steps -->
                         </div>
+
+                        <div class="col-md-6">
+                            <partial name="_RecipeIngredientsPartial" model="Model?.Recipe?.Ingredients ?? new List<Ingredient>()" /> <!-- Includes a partial view for displaying recipe ingredients -->
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services.Contracts;
+using Services.Recipes;
 
 namespace WebApp.Pages
 {
