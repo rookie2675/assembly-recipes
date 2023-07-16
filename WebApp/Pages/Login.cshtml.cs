@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services.Contracts;
+using System.Security.Claims;
+using Repositories.Users;
 
 namespace WebApp.Pages
 {
@@ -13,33 +16,47 @@ namespace WebApp.Pages
         public required string Password { get; set; }
 
         private readonly ILogger<LoginModel> _logger;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IUserRepository _userRepository;
 
-        public LoginModel(ILogger<LoginModel> logger, IAuthenticationService authenticationService)
+        public LoginModel(ILogger<LoginModel> logger, IUserRepository authenticationService)
         {
             _logger = logger;
-            _authenticationService = authenticationService;
+            _userRepository = authenticationService;
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!AreCredentialsValid())
                 return Page();
 
-            var account = _authenticationService.SignIn(Username, Password);
-
-            if (account is null)
+            var user = _userRepository.FindByUsernameAndPassword(Username, Password);
+                
+            if (user is not null)
             {
-                ModelState.AddModelError(string.Empty, "Invalid username or password.");
-                return Page();
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                };
+
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
+                };
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                return RedirectToPage("/Recipes");
             }
 
-            if (account.Id.HasValue)
-                StoreAuthenticationCookie(account.Id.Value);
+            ModelState.AddModelError(string.Empty, "Invalid username or password.");
+            return Page();
+        }
 
-            LogConfirmationMessage();
-
-            return RedirectToPage("/Recipes");
+        public async Task<IActionResult> OnPostLogoutAsync()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToPage("/Index");
         }
 
         private bool AreCredentialsValid()
@@ -58,20 +75,5 @@ namespace WebApp.Pages
 
             return true;
         }
-
-        private void StoreAuthenticationCookie(long userId)
-        {
-            var options = new CookieOptions
-            {
-                Expires = DateTime.UtcNow.AddDays(7),
-                HttpOnly = true,
-                Secure = Request.IsHttps,
-                SameSite = SameSiteMode.Strict
-            };
-
-            Response.Cookies.Append("UserId", userId.ToString(), options);
-        }
-
-        private void LogConfirmationMessage() => _logger.LogInformation("User {Username} logged in successfully.", Username);
     }
 }

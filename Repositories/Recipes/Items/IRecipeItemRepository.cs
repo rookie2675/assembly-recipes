@@ -4,9 +4,9 @@ namespace Repositories.Recipes.Items
 {
     public interface IRecipeItemRepository<T>
     {
-        IEnumerable<T> Find(Recipe recipe);
+        ICollection<T> FindAllByRecipe(Recipe recipe);
         void Add(Recipe recipe, T item);
-        void Update(Recipe recipe, T oldItem, T newItem);
+        void Update(Recipe recipe, T item);
         void Delete(Recipe recipe, T item);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Contracts;
+using Services.Recipes;
 using Services.Users;
 
 namespace IoC

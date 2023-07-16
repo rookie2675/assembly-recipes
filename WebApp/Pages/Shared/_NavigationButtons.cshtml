@@ -1,20 +1,25 @@
 ﻿<nav class="navbar navbar-expand-sm navbar-dark bg-black">
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-expanded="false" aria-controls="navbarNav">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-            @if (User.Identity.IsAuthenticated)
+
+            @{
+                var isUserAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+            }
+
+            @if (isUserAuthenticated)
             {
                 <li class="nav-item">
                     <a class="nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
                 </li>
-                <li class="nav-item">
-                    <form id="logoutForm" asp-page="/Logout" method="post" class="form-inline">
-                        <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
-                    </form>
-                </li>
+                <form id="logoutForm" asp-page-handler="Logout" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
+                </form>
+
             }
             else
             {

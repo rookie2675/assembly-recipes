@@ -1,60 +1,82 @@
 ﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 
 namespace Repositories.Recipes.Items.Ingredients
 {
     public class IngredientsRepository : IIngredientRepository
     {
         private readonly ISqlQueryExecutor _queryExecutor;
+        private readonly ILogger<IngredientsRepository> _logger;
 
-        public IngredientsRepository(ISqlQueryExecutor queryExecutor)
-        {
+        public IngredientsRepository(ILogger<IngredientsRepository> logger, ISqlQueryExecutor queryExecutor) {
+
+            _logger = logger;
             _queryExecutor = queryExecutor;
         }
 
-        public IEnumerable<string> Find(Recipe recipe)
+        public ICollection<Ingredient> FindAllByRecipe(Recipe recipe)
         {
-            string query = "SELECT Ingredient FROM RecipeIngredients WHERE RecipeId = @RecipeId";
-            SqlParameter parameter = new SqlParameter("@RecipeId", recipe.Id);
+            if (recipe == null)
+                throw new ArgumentNullException(nameof(recipe), "Recipe cannot be null.");
+
+            if (recipe.Id <= 0)
+                throw new ArgumentException("Recipe Id should be greater than zero.", nameof(recipe.Id));
+
+            string query = "SELECT RecipeId, Ingredient FROM RecipeIngredients WHERE RecipeId = @RecipeId";
+            var parameter = new SqlParameter("@RecipeId", recipe.Id);
+
+            var ingredients = new List<Ingredient>(); 
 
             using SqlDataReader reader = _queryExecutor.ExecuteQuery(query, parameter);
             while (reader.Read())
             {
-                string ingredient = reader.GetString(0);
-                yield return ingredient;
+                var ingredient = new Ingredient
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                };
+                ingredients.Add(ingredient);    
             }
+
+            _logger.LogInformation($"Found {ingredients.Count} ingredients for RecipeId: {recipe.Id}, RecipeName: {recipe.Name}");
+            return ingredients;
         }
 
-        public void Add(Recipe recipe, string ingredient)
+        public void Add(Recipe recipe, Ingredient ingredient)
         {
-            string query = "INSERT INTO RecipeIngredients (RecipeId, Ingredient) VALUES (@RecipeId, @Ingredient)";
+            string query = "INSERT INTO RecipeIngredients (RecipeId, IngredientId, IngredientName) VALUES (@RecipeId, @IngredientId, @IngredientName)";
+
             SqlParameter[] parameters = {
                 new SqlParameter("@RecipeId", recipe.Id),
-                new SqlParameter("@Ingredient", ingredient)
+                new SqlParameter("@IngredientId", ingredient.Id),
+                new SqlParameter("@IngredientName", ingredient.Name)
             };
 
             _queryExecutor.ExecuteNonQuery(query, parameters);
         }
 
-        public void Update(Recipe recipe, string oldIngredient, string newIngredient)
+        public void Update(Recipe recipe, Ingredient ingredient)
         {
-            string query = "UPDATE RecipeIngredients SET Ingredient = @NewIngredient WHERE RecipeId = @RecipeId AND Ingredient = @OldIngredient";
+            string query = "UPDATE RecipeIngredients SET IngredientName = @IngredientName WHERE RecipeId = @RecipeId AND IngredientId = @IngredientId";
+
             SqlParameter[] parameters = {
                 new SqlParameter("@RecipeId", recipe.Id),
-                new SqlParameter("@OldIngredient", oldIngredient),
-                new SqlParameter("@NewIngredient", newIngredient)
+                new SqlParameter("@IngredientId", ingredient.Id),
+                new SqlParameter("@IngredientName", ingredient.Name)
             };
 
             _queryExecutor.ExecuteNonQuery(query, parameters);
         }
 
-        public void Delete(Recipe recipe, string ingredient)
+        public void Delete(Recipe recipe, Ingredient ingredient)
         {
-            string query = "DELETE FROM RecipeIngredients WHERE RecipeId = @RecipeId AND Ingredient = @Ingredient";
+            string query = "DELETE FROM RecipeIngredients WHERE RecipeId = @RecipeId AND IngredientId = @IngredientId";
+
             SqlParameter[] parameters = {
                 new SqlParameter("@RecipeId", recipe.Id),
-                new SqlParameter("@Ingredient", ingredient)
+                new SqlParameter("@IngredientId", ingredient.Id)
             };
 
             _queryExecutor.ExecuteNonQuery(query, parameters);

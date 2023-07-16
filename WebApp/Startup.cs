@@ -11,32 +11,26 @@ namespace WebApp
             Configuration = configuration;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)  
         {
             services.AddLogging();
             services.AddRazorPages();
             services.ConfigureServices();
-            services.ConfigureDatabase(Configuration);
             services.ConfigureRepositories();
+            services.ConfigureAuthentication();
+            services.ConfigureDatabase(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
+        {   
+            ConfigureEnvironment(app, env);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -49,6 +43,19 @@ namespace WebApp
                 context.Response.Redirect("/Recipes");
                 return Task.CompletedTask;
             });
+        }
+
+        private static void ConfigureEnvironment(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
         }
     }
 }

@@ -20,5 +20,10 @@ namespace Services.Users
         public User Update(User user) => _userRepository.Update(user);
 
         public User Delete(long id) => _userRepository.Delete(id);
+
+        public int GetTotalCount()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

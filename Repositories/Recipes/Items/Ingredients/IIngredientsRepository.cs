@@ -1,6 +1,6 @@
-﻿using Repositories.Recipes.Items;
+﻿using Domain;
 
 namespace Repositories.Recipes.Items.Ingredients
 {
-    public interface IIngredientRepository : IRecipeItemRepository<string> { }
+    public interface IIngredientRepository : IRecipeItemRepository<Ingredient> { }
 }

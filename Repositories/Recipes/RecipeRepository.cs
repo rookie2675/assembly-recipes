@@ -1,24 +1,14 @@
 ﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
-using Repositories.Recipes.Items.Ingredients;
-using Repositories.Recipes.Items.Steps;
 
 namespace Repositories.Recipes
 {
     public class RecipeRepository : IRecipeRepository
     {
         private readonly ISqlQueryExecutor _databaseHelper;
-        private readonly IStepsRepository _stepsRepository;
-        private readonly IIngredientRepository _ingredientsRepository;
 
-        public RecipeRepository(ISqlQueryExecutor databaseHelper,
-            IStepsRepository recipeStepRepository, IIngredientRepository ingredientRepository)
-        {
-            _databaseHelper = databaseHelper;
-            _stepsRepository = recipeStepRepository;
-            _ingredientsRepository = ingredientRepository;
-        }
+        public RecipeRepository(ISqlQueryExecutor databaseHelper) => _databaseHelper = databaseHelper;
 
         public Recipe? FindById(long id)
         {
@@ -30,13 +20,6 @@ namespace Repositories.Recipes
             if (reader.Read())
             {
                 var recipe = CreateRecipeFromReader(reader);
-
-                foreach (string step in _stepsRepository.Find(recipe))
-                    recipe.AddStep(step);
-
-                foreach (string ingredient in _ingredientsRepository.Find(recipe))
-                    recipe.AddIngredient(ingredient);
-
                 return recipe;
             }
 

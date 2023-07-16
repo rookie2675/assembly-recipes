@@ -15,5 +15,7 @@ namespace Services.Contracts
         T Update(T entity);
 
         T Delete(long id);
+
+        int GetTotalCount();
     }
 }
