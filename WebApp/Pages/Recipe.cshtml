@@ -16,16 +16,26 @@
 
                     <!-- Displays the recipe name -->
                     <h2>@(Model?.Recipe?.Name)</h2>
+                    @{
+                        var isUserAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+                    }
+                    @if (isUserAuthenticated)
+                    {
+                        <!-- Displays the delete and edit recipe buttons -->
+                        <div class="row">
+                            <div class="col-12">
+                                <form method="post">
+                                    <input type="hidden" asp-for="RecipeId" />
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete Recipe</button>
+                                </form>
+                                <a asp-page="/UpdateRecipe" asp-route-id="@Model.Recipe.Id" class="btn btn-primary">Edit Recipe</a>
 
-                    <!-- Displays the delete recipe button -->
-                    <div class="row">
-                        <div class="col-12">
-                            <form method="post">
-                                <input type="hidden" asp-for="RecipeId" />
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete Recipe</button>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+
+
+
+                    }
 
                     <!-- Displays the recipe image -->
                     <img src="~/images/@(Model?.Recipe?.ImageURL)" class="recipe-image mb-4" alt="@Model?.Recipe?.Name">
