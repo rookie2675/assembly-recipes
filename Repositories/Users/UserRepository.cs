@@ -21,7 +21,7 @@ namespace Repositories.Users
         {
             if (id <= 0) throw new ArgumentException("ID must be a positive non-zero value.", nameof(id));
 
-            string query = "SELECT Id, Username, Password FROM Users WHERE Id = @Id";
+            string query = "SELECT Id, Username, Password, Email FROM Users WHERE Id = @Id";
             SqlParameter[] parameters = { new SqlParameter("@Id", id) };
 
             using SqlDataReader reader = _databaseHelper.ExecuteQuery(query, parameters);

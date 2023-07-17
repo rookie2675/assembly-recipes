@@ -8,14 +8,14 @@ namespace WebApp.Pages
 {
     public class UserProfileModel : PageModel
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         [BindProperty]
         public User User { get; private set; }
 
-        public bool EditMode { get; private set; }
+        public bool EditMode { get; set; }
 
-        public UserProfileModel(UserService userService)
+        public UserProfileModel(IUserService userService)
         {
             _userService = userService;
             EditMode = false;

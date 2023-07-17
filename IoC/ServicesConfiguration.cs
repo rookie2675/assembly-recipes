@@ -10,9 +10,9 @@ namespace IoC
     {
         public static void ConfigureServices(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IRecipeService, RecipeService>();
-            serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
+            serviceCollection.AddSingleton<IUserService, UserService>();
+            serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Repositories.Recipes
 
         private static Recipe CreateRecipeFromReader(SqlDataReader reader)
         {
-            int id = reader.GetInt32(0);
+            long id = reader.GetInt64(0);
             string name = reader.GetString(1);
             string description = reader.GetString(2);
             string shortDescription = reader.GetString(3);

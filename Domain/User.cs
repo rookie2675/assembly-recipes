@@ -1,6 +1,7 @@
 ﻿namespace Domain
 {
-    public class User
+    public class User : Object
+
     {
         public long? Id { get; set; }
 
