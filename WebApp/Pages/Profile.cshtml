@@ -1,0 +1,38 @@
+﻿@page
+@model UserProfileModel
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<h1>User Profile</h1>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="User.Username">Username</label>
+        <input asp-for="User.Username" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="User.Email">Email</label>
+        <input asp-for="User.Email" class="form-control" disabled="!EditMode" />
+    </div>
+    <div class="form-group">
+        <label asp-for="User.Role">Role</label>
+        <input asp-for="User.Role" class="form-control" disabled="!EditMode" />
+    </div>
+    <div class="form-group">
+
+        <!--
+
+
+        -->
+        @*if (!EditMode)
+        {
+            <button type="submit" class="btn btn-primary" asp-page-handler="EditProfile">Edit Profile</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-success">Save Profile</button>
+            <button type="submit" class="btn btn-secondary" asp-page-handler="CancelEdit">Cancel</button>
+        }*@
+    </div>
+</form>
