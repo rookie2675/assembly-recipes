@@ -1,4 +1,57 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function addIngredient() {
+    var ingredientContainer = document.getElementById("ingredientContainer");
+    var input = document.createElement("input");
+    input.type = "text";
+    input.name = "Ingredients";
+    input.classList.add("form-control");
+    input.required = true;
 
-// Write your JavaScript code.
+    var button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("btn", "btn-danger");
+    button.textContent = "Remove";
+    button.onclick = function () {
+        removeIngredient(this);
+    };
+
+    var ingredientRow = document.createElement("div");
+    ingredientRow.classList.add("ingredient-row");
+    ingredientRow.appendChild(input);
+    ingredientRow.appendChild(button);
+
+    ingredientContainer.appendChild(ingredientRow);
+}
+
+function addStep() {
+    var stepContainer = document.getElementById("stepContainer");
+    var input = document.createElement("input");
+    input.type = "text";
+    input.name = "Steps";
+    input.classList.add("form-control");
+    input.required = true;
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("btn", "btn-danger");
+    button.textContent = "Remove";
+    button.onclick = function () {
+        removeStep(this);
+    };
+
+    var stepRow = document.createElement("div");
+    stepRow.classList.add("step-row");
+    stepRow.appendChild(input);
+    stepRow.appendChild(button);
+
+    stepContainer.appendChild(stepRow);
+}
+
+function removeIngredient(button) {
+    var ingredientRow = button.parentElement;
+    ingredientRow.remove();
+}
+
+function removeStep(button) {
+    var stepRow = button.parentElement;
+    stepRow.remove();
+}
