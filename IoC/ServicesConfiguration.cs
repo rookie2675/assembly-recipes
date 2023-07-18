@@ -11,8 +11,8 @@ namespace IoC
         public static void ConfigureServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IRecipeService, RecipeService>();
-            serviceCollection.AddSingleton<IUserService, UserService>();
-            serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
+            serviceCollection.AddScoped<IUserService, UserService>();
+            serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
         }
     }
 }
