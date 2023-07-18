@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using System.Text;
+
+namespace Domain
 {
     public class Recipe
     {
@@ -25,7 +27,6 @@
             _ingredients = new();
         }
 
-
         public void AddIngredient(Ingredient ingredient)
         {
             if (ingredient is null)
@@ -40,6 +41,27 @@
                 throw new ArgumentNullException(nameof(step));
 
             _steps.Add(step);
+        }
+
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine($"Recipe Id: {Id}");
+            stringBuilder.AppendLine($"Name: {Name}");
+            stringBuilder.AppendLine($"Description: {Description}");
+            stringBuilder.AppendLine($"Short Description: {ShortDescription}");
+            stringBuilder.AppendLine($"Image URL: {ImageURL}");
+
+            stringBuilder.AppendLine("Ingredients:");
+            foreach (var ingredient in Ingredients)
+                stringBuilder.AppendLine($"- {ingredient}");
+
+            stringBuilder.AppendLine("Steps:");
+            foreach (var step in Steps)
+                stringBuilder.AppendLine($"- {step}");
+
+            return stringBuilder.ToString();
         }
     }
 }
