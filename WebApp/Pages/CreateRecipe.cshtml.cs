@@ -1,14 +1,15 @@
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
-using Domain;
 using Services.Recipes;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Pages
 {
     public class CreateRecipeModel : PageModel
     {
         private readonly IRecipeService _recipeService;
+        private readonly ILogger<CreateRecipeModel> _logger;
 
         [Required(ErrorMessage = "Ingredients field is required.")]
         public List<string> Ingredients { get; set; }
@@ -16,8 +17,9 @@ namespace WebApp.Pages
         [BindProperty]
         public Recipe? Recipe { get; set; }
 
-        public CreateRecipeModel(IRecipeService recipeService)
+        public CreateRecipeModel(ILogger<CreateRecipeModel> logger, IRecipeService recipeService)
         {
+            _logger = logger;
             _recipeService = recipeService;
             Ingredients = new List<string>();
         }
@@ -29,7 +31,10 @@ namespace WebApp.Pages
                 Recipe = _recipeService.GetById(id.Value);
 
                 if (Recipe is null)
+                {
+                    _logger.LogInformation($"No recipe was found for ID: {id}");
                     return NotFound();
+                }
             }
 
             return Page();
@@ -47,7 +52,11 @@ namespace WebApp.Pages
 
             else
             {
-                _recipeService.Add(Recipe);
+                if (Recipe is not null)
+                {
+                    _logger.LogInformation($"Request received to add recipe: { Recipe }");
+                    _recipeService.Add(Recipe);
+                }
             }
 
             return RedirectToPage("/Recipes");
