@@ -34,7 +34,7 @@ namespace Repositories.Recipes.Items.Ingredients
             {
                 var ingredient = new Ingredient
                 {
-                    Id = reader.GetInt32(0),
+                    Id = reader.GetInt64(0),
                     Name = reader.GetString(1)
                 };
                 ingredients.Add(ingredient);    

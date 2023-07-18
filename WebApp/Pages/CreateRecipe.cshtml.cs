@@ -47,11 +47,10 @@ namespace WebApp.Pages
 
             else
             {
-                Recipe = new Recipe();
                 _recipeService.Add(Recipe);
             }
 
-            return RedirectToPage("/Recipes/Index");
+            return RedirectToPage("/Recipes");
         }
     }
 }
