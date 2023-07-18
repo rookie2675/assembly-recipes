@@ -1,8 +1,6 @@
 ﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
 
 namespace Repositories.Users
 {
@@ -59,7 +57,6 @@ namespace Repositories.Users
 
             return user;
         }
-
 
         public List<User> FindAll()
         {
@@ -185,6 +182,20 @@ namespace Repositories.Users
         public int GetTotalCount()
         {
             throw new NotImplementedException();
+        }
+
+        public bool DoesUsernameExist(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentException("Username cannot be null or empty.", nameof(username));
+
+            string query = "SELECT COUNT(*) FROM Users WHERE Username = @Username";
+
+            SqlParameter[] parameters = { new SqlParameter("@Username", username) };
+
+            int count = _databaseHelper.ExecuteScalar<int>(query, parameters);
+
+            return count > 0;
         }
     }
 }

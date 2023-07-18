@@ -4,10 +4,21 @@
     ViewData["Title"] = "Register";
 }
 
+<!-- Container for the Register form -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
 
+            <!-- Alert Message -->
+            @if (!string.IsNullOrEmpty(ViewData["Message"] as string))
+            {
+                <!-- Improve the visual appearance of the alert message -->
+                <div class="alert alert-info" role="alert">
+                    @ViewData["Message"]
+                </div>
+            }
+
+            <!-- Register Form -->
             <form method="post">
                 <div class="form-group">
                     <label asp-for="Username" class="control-label">Username:</label>
@@ -29,6 +40,7 @@
                 </div>
             </form>
 
+            <!-- Link to the Login page -->
             <div class="text-center mt-3">
                 <a asp-page="Login" class="btn btn-link">Login</a>
             </div>

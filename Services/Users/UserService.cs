@@ -15,7 +15,14 @@ namespace Services.Users
 
         public IEnumerable<User> GetPage(int page, int size) => _userRepository.FindPage(page, size);
 
-        public User Add(User user) => _userRepository.Add(user);
+        public User Add(User user)
+        {
+            if (_userRepository.DoesUsernameExist(user.Username))
+                throw new ArgumentException("Username already exists");
+ 
+
+            return _userRepository.Add(user);
+        }
 
         public User Update(User user) => _userRepository.Update(user);
 
