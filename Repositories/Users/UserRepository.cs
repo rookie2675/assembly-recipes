@@ -7,12 +7,12 @@ namespace Repositories.Users
     public class UserRepository : IUserRepository
     {
         private readonly string _connectionString;
-        private readonly ISqlQueryExecutor _databaseHelper;
+        private readonly ISqlQueryExecutor _queryExecutor;
 
-        public UserRepository(string connectionString, ISqlQueryExecutor databaseHelper)
+        public UserRepository(string connectionString, ISqlQueryExecutor queryExecutor)
         {
+            _queryExecutor = queryExecutor;
             _connectionString = connectionString;
-            _databaseHelper = databaseHelper;
         }
 
         public User? FindById(long id)
@@ -22,9 +22,9 @@ namespace Repositories.Users
             string query = "SELECT Id, Username, Password, Email FROM Users WHERE Id = @Id";
             SqlParameter[] parameters = { new SqlParameter("@Id", id) };
 
-            using SqlDataReader reader = _databaseHelper.ExecuteQuery(query, parameters);
+            using SqlDataReader reader = _queryExecutor.ExecuteQuery(query, parameters);
 
-            return ReadUserFromReader(reader);
+            return MapSqlRowToObject(reader);
         }
 
         public User? FindByUsernameAndPassword(string username, string password)
@@ -42,7 +42,7 @@ namespace Repositories.Users
                 new SqlParameter("@Password", password)
             };
 
-            using (SqlDataReader reader = _databaseHelper.ExecuteQuery(query, parameters))
+            using (SqlDataReader reader = _queryExecutor.ExecuteQuery(query, parameters))
             {
                 if (reader.Read())
                 {
@@ -62,9 +62,20 @@ namespace Repositories.Users
         {
             string query = "SELECT Id, Username, Password FROM Users";
 
-            using SqlDataReader reader = _databaseHelper.ExecuteQuery(query);
+            using SqlDataReader reader = _queryExecutor.ExecuteQuery(query);
 
-            return ReadUsersFromReader(reader);
+            if (reader is null || !reader.IsClosed || !reader.HasRows)
+                throw new InvalidDataException("SqlDataReader is null or closed, or empty.");
+
+            var users = new List<User>();
+
+            if (reader.Read())
+            {
+                User user = MapSqlRowToObject(reader);
+                users.Add(user);
+            }
+
+            return users;
         }
 
         public IEnumerable<User> FindPage(int page, int pageSize)
@@ -79,7 +90,7 @@ namespace Repositories.Users
             connection.Open();
 
             string countQuery = "SELECT COUNT(*) FROM Users";
-            int totalCount = (int)_databaseHelper.ExecuteScalar<long>(countQuery, new SqlParameter[1]);
+            int totalCount = (int)_queryExecutor.ExecuteScalar<long>(countQuery, new SqlParameter[1]);
 
             string query = "SELECT Id, Username, Password, Email FROM Users " +
                            "ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
@@ -91,16 +102,26 @@ namespace Repositories.Users
                 new SqlParameter("@PageSize", pageSize)
             };
 
-            using SqlDataReader reader = _databaseHelper.ExecuteQuery(query, parameters);
+            using SqlDataReader reader = _queryExecutor.ExecuteQuery(query, parameters);
 
-            var users = ReadUsersFromReader(reader);
+            if (reader is null || !reader.IsClosed || !reader.HasRows)
+                throw new InvalidDataException("SqlDataReader is null or closed, or empty.");
+
+            var users = new List<User>();
+
+            if (reader.Read())
+            {
+                User user = MapSqlRowToObject(reader);
+                users.Add(user);
+            }
 
             return users;
         }
 
         public User Add(User user)
         {
-            if (user is null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            if (user is null) 
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
 
             string query = "INSERT INTO Users (Username, Password, Role, Email) VALUES (@Username, @Password, @Role, @Email); SELECT SCOPE_IDENTITY();";
             SqlParameter[] parameters =
@@ -111,7 +132,7 @@ namespace Repositories.Users
                 new SqlParameter("@Email", user.Email)
             };
 
-            long id = Convert.ToInt64(_databaseHelper.ExecuteScalar<long>(query, parameters));
+            long id = Convert.ToInt64(_queryExecutor.ExecuteScalar<long>(query, parameters));
             user.Id = id;
 
             return user;
@@ -119,9 +140,11 @@ namespace Repositories.Users
 
         public User Update(User user)
         {
-            if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            if (user == null) 
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
 
-            if (string.IsNullOrWhiteSpace(user.Password)) throw new ArgumentException("Password cannot be null or empty.");
+            if (string.IsNullOrWhiteSpace(user.Password)) 
+                throw new ArgumentException("Password cannot be null or empty.");
 
             using SqlConnection connection = new(_connectionString);
             connection.Open();
@@ -133,56 +156,14 @@ namespace Repositories.Users
                 new SqlParameter("@Id", user.Id)
             };
 
-            _databaseHelper.ExecuteNonQuery(query, parameters);
+            _queryExecutor.ExecuteNonQuery(query, parameters);
 
             return user;
         }
 
         public User Delete(long id) => throw new NotImplementedException();
 
-        private static User? ReadUserFromReader(SqlDataReader reader)
-        {
-            if (reader.Read())
-            {
-                long id = (long)reader["Id"];
-                string username = (string)reader["Username"];
-                string password = (string)reader["Password"];
-                string email = (string)reader["Email"];
-
-                return new User { Id = id, Username = username, Password = password, Email = email };
-            }
-
-            return null;
-        }
-
-        private static List<User> ReadUsersFromReader(SqlDataReader reader)
-        {
-            var users = new List<User>();
-
-            if (reader != null && !reader.IsClosed)
-            {
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        long id = (long)reader["Id"];
-                        string username = (string)reader["Username"];
-                        string password = (string)reader["Password"];
-                        string email = (string)reader["Email"]; // Assuming "Email" is the column name in the database table
-
-                        var user = new User { Id = id, Username = username, Password = password, Email = email };
-                        users.Add(user);
-                    }
-                }
-            }
-
-            return users;
-        }
-
-        public int GetTotalCount()
-        {
-            throw new NotImplementedException();
-        }
+        public int GetTotalCount() => throw new NotImplementedException();
 
         public bool DoesUsernameExist(string username)
         {
@@ -193,9 +174,36 @@ namespace Repositories.Users
 
             SqlParameter[] parameters = { new SqlParameter("@Username", username) };
 
-            int count = _databaseHelper.ExecuteScalar<int>(query, parameters);
+            int count = _queryExecutor.ExecuteScalar<int>(query, parameters);
 
             return count > 0;
+        }
+
+        public bool DoesEmailExist(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email cannot be null or empty.", nameof(email));
+
+            string query = "SELECT COUNT(*) FROM Users WHERE Email = @Email";
+
+            SqlParameter[] parameters = { new SqlParameter("Email", email) };
+
+            int count = _queryExecutor.ExecuteScalar<int>(query, parameters);
+
+            return count > 0;
+        }
+
+        private static User MapSqlRowToObject(SqlDataReader reader)
+        {
+            if (reader is null || !reader.IsClosed || !reader.HasRows)
+                throw new InvalidDataException("SqlDataReader is null or closed, or empty.");
+
+            long id = (long)reader["Id"];
+            string username = (string)reader["Username"];
+            string password = (string)reader["Password"];
+            string email = (string)reader["Email"];
+
+            return new User { Id = id, Username = username, Password = password, Email = email };
         }
     }
 }
