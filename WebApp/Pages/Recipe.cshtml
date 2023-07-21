@@ -8,31 +8,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"> <!-- Adds a link to the Bootstrap CSS library -->
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid pb-5">
 
         <div class="row">
             <div class="col-12">
                 <div class="recipe-details text-center">
 
                     <!-- Displays the recipe name -->
-                    <h2>@(Model?.Recipe?.Name)</h2>
                     @{
                         var isUserAuthenticated = User?.Identity?.IsAuthenticated ?? false;
                     }
                     @if (isUserAuthenticated)
                     {
-                        <!-- Displays the delete and edit recipe buttons -->
-                        <div class="row">
-                            <div class="col-12">
-                                <form method="post">
-                                    <input type="hidden" asp-for="RecipeId" />
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete Recipe</button>
-                                </form>
-                                <a asp-page="/UpdateRecipe" asp-route-id="@Model.Recipe.Id" class="btn btn-primary">Edit Recipe</a>
+                        <div class="container pb-3">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-center">
+                                    <h2 class="title-with-padding">@(Model?.Recipe?.Name)</h2>
 
+                                    <!-- Edit button -->
+                                    <a asp-page="/UpdateRecipe" asp-route-id="@Model.Recipe.Id" class="btn btn-primary" style="height: 40px;">Edit</a>
+
+                                    <!-- Delete button -->
+                                    <form method="post">
+                                        <input type="hidden" asp-for="Recipe.Id" />
+                                        <button type="submit" class="btn btn-danger" style="height: 40px;" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-
 
 
                     }

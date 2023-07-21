@@ -61,3 +61,7 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.title-with-padding {
+    padding-right: 20px;
+}
