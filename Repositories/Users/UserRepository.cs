@@ -1,6 +1,7 @@
 ﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics;
 
 namespace Repositories.Users
 {
@@ -17,14 +18,23 @@ namespace Repositories.Users
 
         public User? FindById(long id)
         {
-            if (id <= 0) throw new ArgumentException("ID must be a positive non-zero value.", nameof(id));
+            if (id <= 0) 
+                throw new ArgumentException("ID must be a positive non-zero value.", nameof(id));
 
             string query = "SELECT Id, Username, Password, Email FROM Users WHERE Id = @Id";
-            SqlParameter[] parameters = { new SqlParameter("@Id", id) };
+            var parameter = new SqlParameter("@Id", id);
 
-            using SqlDataReader reader = _queryExecutor.ExecuteQuery(query, parameters);
+            Debug.WriteLine($"Executing FindById with ID: {id}");
 
-            return MapSqlRowToObject(reader);
+            using var reader = _queryExecutor.ExecuteQuery(query, parameter);
+
+            if (reader.Read())
+            {
+                var user = CreateUserFromReader(reader);
+                return user;
+            }
+
+            return null;
         }
 
         public User? FindByUsernameAndPassword(string username, string password)
@@ -71,7 +81,7 @@ namespace Repositories.Users
 
             if (reader.Read())
             {
-                User user = MapSqlRowToObject(reader);
+                User user = CreateUserFromReader(reader);
                 users.Add(user);
             }
 
@@ -111,7 +121,7 @@ namespace Repositories.Users
 
             if (reader.Read())
             {
-                User user = MapSqlRowToObject(reader);
+                User user = CreateUserFromReader(reader);
                 users.Add(user);
             }
 
@@ -193,17 +203,22 @@ namespace Repositories.Users
             return count > 0;
         }
 
-        private static User MapSqlRowToObject(SqlDataReader reader)
+        private static User CreateUserFromReader(SqlDataReader reader)
         {
-            if (reader is null || !reader.IsClosed || !reader.HasRows)
-                throw new InvalidDataException("SqlDataReader is null or closed, or empty.");
+            long id = reader.GetInt64(0);
+            string username = reader.GetString(1);
+            string password = reader.GetString(2);
+            string email = reader.GetString(3);
 
-            long id = (long)reader["Id"];
-            string username = (string)reader["Username"];
-            string password = (string)reader["Password"];
-            string email = (string)reader["Email"];
+            var user = new User()
+            {
+                Id = id,
+                Username = username,
+                Password = password,
+                Email = email
+            };
 
-            return new User { Id = id, Username = username, Password = password, Email = email };
+            return user;
         }
     }
 }
