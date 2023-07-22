@@ -1,6 +1,7 @@
 ﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics;
 
 namespace Repositories.Recipes
 {
@@ -12,8 +13,13 @@ namespace Repositories.Recipes
 
         public Recipe? FindById(long id)
         {
+            if (id <= 0)
+                throw new ArgumentException("ID must be a positive non-zero value.", nameof(id));
+
             string query = "SELECT Id, Name, Description, ShortDescription, ImageURL FROM Recipes WHERE Id = @Id";
             var parameter = new SqlParameter("@Id", id);
+
+            Debug.WriteLine($"Executing FindById with ID: {id}");
 
             using var reader = _databaseHelper.ExecuteQuery(query, parameter);
 
