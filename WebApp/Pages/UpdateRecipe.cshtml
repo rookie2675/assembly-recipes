@@ -1,6 +1,8 @@
 ﻿@page
 @model WebApp.Pages.CreateRecipeModel
 
+<script src="~/js/recipes.js"></script>
+
 <h1>Create New Recipe</h1>
 
 <form method="post">
@@ -24,23 +26,39 @@
         <input type="text" id="imageURL" name="ImageURL" class="form-control" required asp-for="Recipe.ImageURL" />
     </div>
 
+    <!-- Ingredients -->
     <h3>Ingredients:</h3>
     <div class="form-group" id="ingredientContainer">
         @foreach (var ingredient in Model.Recipe.Ingredients)
         {
-            <input type="text" name="Ingredients" class="form-control" required value="@ingredient.Name" />
+            <div class="row mb-2">
+                <div class="col-8">
+                    <input type="text" name="Ingredients" class="form-control" required value="@ingredient.Name" />
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn btn-danger" onclick="removeIngredient(this)">Remove</button>
+                </div>
+            </div>
         }
     </div>
     <button type="button" class="btn btn-secondary" onclick="addIngredient()">Add Ingredient</button>
 
+    <!-- Steps -->
     <h3>Steps:</h3>
     <div class="form-group" id="stepContainer">
         @foreach (var step in Model.Recipe.Steps)
         {
-            <input type="text" name="Steps" class="form-control" required value="@step.Description" />
+            <div class="row mb-2">
+                <div class="col-8">
+                    <input type="text" name="Steps" class="form-control" required value="@step.Description" />
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn btn-danger" onclick="removeStep(this)">Remove</button>
+                </div>
+            </div>
         }
     </div>
     <button type="button" class="btn btn-secondary" onclick="addStep()">Add Step</button>
 
-    <button type="submit" class="btn btn-primary">Create Recipe</button>
+    <button type="submit" class="btn btn-primary">Update Recipe</button>
 </form>
