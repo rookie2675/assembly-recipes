@@ -171,7 +171,27 @@ namespace Repositories.Users
             return user;
         }
 
-        public User Delete(long id) => throw new NotImplementedException();
+        public User Delete(long id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("ID must be a positive non-zero value.", nameof(id));
+
+            // Retrieve the user with the given ID before deleting it (optional).
+            User userToDelete = FindById(id);
+
+            if (userToDelete == null)
+                throw new ArgumentException("User not found.", nameof(id));
+
+            string query = "DELETE FROM Users WHERE Id = @Id";
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@Id", id)
+            };
+
+            _queryExecutor.ExecuteNonQuery(query, parameters);
+
+            return userToDelete;
+        }
 
         public int GetTotalCount() => throw new NotImplementedException();
 
