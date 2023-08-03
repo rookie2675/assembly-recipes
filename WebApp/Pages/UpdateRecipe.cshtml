@@ -3,7 +3,7 @@
 
 <script src="~/js/recipes.js"></script>
 
-<h1>Create New Recipe</h1>
+<h1>@Model.Recipe.Name</h1>
 
 <form method="post">
     <div class="form-group">
@@ -41,7 +41,13 @@
             </div>
         }
     </div>
-    <button type="button" class="btn btn-secondary" onclick="addIngredient()">Add Ingredient</button>
+
+    <!-- Add Ingredient Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary" onclick="addStep()">Add Step</button>
+        </div>
+    </div>
 
     <!-- Steps -->
     <h3>Steps:</h3>
@@ -58,7 +64,19 @@
             </div>
         }
     </div>
-    <button type="button" class="btn btn-secondary" onclick="addStep()">Add Step</button>
 
-    <button type="submit" class="btn btn-primary">Update Recipe</button>
+    <!-- Add Step Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary" onclick="addStep()">Add Step</button>
+        </div>
+    </div>
+
+    <!-- Update Recipe Button -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Update Recipe</button>
+        </div>
+    </div>
+
 </form>

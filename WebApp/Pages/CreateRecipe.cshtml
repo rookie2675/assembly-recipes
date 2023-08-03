@@ -1,7 +1,9 @@
 ﻿@page
 @model WebApp.Pages.CreateRecipeModel
 
-<h1>Create New Recipe</h1>
+<script src="~/js/recipes.js"></script>
+
+<h1>Create Recipe</h1>
 
 <form method="post">
     <div class="form-group">
@@ -24,24 +26,51 @@
         <input type="text" id="imageURL" name="ImageURL" class="form-control" required />
     </div>
 
+    <!-- Ingredients -->
     <h3>Ingredients:</h3>
     <div class="form-group" id="ingredientContainer">
-        <div class="ingredient-row">
-            <input type="text" name="Ingredients" class="form-control" required />
-            <button type="button" class="btn btn-danger" onclick="removeIngredient(this)">Remove</button>
+        <div class="row mb-2">
+            <div class="col-8">
+                <input type="text" name="Ingredients" class="form-control" required />
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-danger" onclick="removeIngredient(this)">Remove</button>
+            </div>
         </div>
     </div>
 
-    <button type="button" class="btn btn-secondary" onclick="addIngredient()">Add Ingredient</button>
+    <!-- Add Ingredient Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary" onclick="addStep()">Add Step</button>
+        </div>
+    </div>
 
+    <!-- Steps -->
     <h3>Steps:</h3>
     <div class="form-group" id="stepContainer">
-        <div class="step-row">
-            <input type="text" name="Steps" class="form-control" required />
-            <button type="button" class="btn btn-danger" onclick="removeStep(this)">Remove</button>
+        <div class="row mb-2">
+            <div class="col-8">
+                <input type="text" name="Steps" class="form-control" required />
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-danger" onclick="removeStep(this)">Remove</button>
+            </div>
         </div>
     </div>
-    <button type="button" class="btn btn-secondary" onclick="addStep()">Add Step</button>
 
-    <button type="submit" class="btn btn-primary">Create Recipe</button>
+    <!-- Add Step Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary" onclick="addStep()">Add Step</button>
+        </div>
+    </div>
+
+    <!-- Create Recipe Button -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Create Recipe</button>
+        </div>
+    </div>
+
 </form>
