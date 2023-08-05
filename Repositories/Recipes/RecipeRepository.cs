@@ -7,9 +7,14 @@ namespace Repositories.Recipes
 {
     public class RecipeRepository : IRecipeRepository
     {
+        private readonly IRecipeMapper _recipeMapper;
         private readonly ISqlQueryExecutor _databaseHelper;
 
-        public RecipeRepository(ISqlQueryExecutor databaseHelper) => _databaseHelper = databaseHelper;
+        public RecipeRepository(IRecipeMapper recipeMapper, ISqlQueryExecutor databaseHelper)
+        {
+            _recipeMapper = recipeMapper;
+            _databaseHelper = databaseHelper;
+        }
 
         public Recipe? FindById(long id)
         {
@@ -25,7 +30,7 @@ namespace Repositories.Recipes
 
             if (reader.Read())
             {
-                var recipe = CreateRecipeFromReader(reader);
+                var recipe = _recipeMapper.MapReaderToRecipe(reader);
                 return recipe;
             }
 
@@ -42,7 +47,7 @@ namespace Repositories.Recipes
             {
                 while (reader.Read())
                 {
-                    var recipe = CreateRecipeFromReader(reader);
+                    var recipe = _recipeMapper.MapReaderToRecipe(reader);
                     recipes.Add(recipe);
                 }
             }
@@ -66,7 +71,7 @@ namespace Repositories.Recipes
             using var reader = _databaseHelper.ExecuteQuery(query, parameters);
 
             while (reader.Read())
-                yield return CreateRecipeFromReader(reader);
+                yield return _recipeMapper.MapReaderToRecipe(reader);
         }
 
         public Recipe Add(Recipe recipe)
@@ -116,26 +121,6 @@ namespace Repositories.Recipes
             _databaseHelper.ExecuteNonQuery(query, parameter);
 
             return deletedRecipe;
-        }
-
-        private static Recipe CreateRecipeFromReader(SqlDataReader reader)
-        {
-            long id = reader.GetInt64(0);
-            string name = reader.GetString(1);
-            string description = reader.GetString(2);
-            string shortDescription = reader.GetString(3);
-            string imageURL = reader.GetString(4);
-
-            var recipe = new Recipe()
-            {
-                Id = id,
-                Name = name,
-                Description = description,
-                ShortDescription = shortDescription,
-                ImageURL = imageURL
-            };
-
-            return recipe;
         }
 
         public int GetTotalCount()

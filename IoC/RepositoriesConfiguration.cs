@@ -10,6 +10,8 @@ namespace IoC
     {
         public static void ConfigureRepositories(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<IRecipeMapper, RecipeMapper>();
+
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<IStepsRepository, StepsRepository>();
             serviceCollection.AddScoped<IRecipeRepository, RecipeRepository>();
