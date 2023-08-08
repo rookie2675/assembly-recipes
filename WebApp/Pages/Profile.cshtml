@@ -6,25 +6,25 @@
 }
 
 <h1>User Profile</h1>
-<form method="post">
+<form method="post">    
     <div class="form-group">
-        <label asp-for="User.Username">Username</label>
-        <input asp-for="User.Username" class="form-control" disabled />
+        <label asp-for="UserProfile.Username">Username</label>
+        <input asp-for="UserProfile.Username" class="form-control" disabled />
     </div>
     <div class="form-group">
-        <label asp-for="User.Email">Email</label>
-        <input asp-for="User.Email" class="form-control" disabled="!EditMode" />
+        <label asp-for="UserProfile.Email">Email</label>
+        <input asp-for="UserProfile.Email" class="form-control" disabled="!EditMode" />
     </div>
     <div class="form-group">
-        <label asp-for="User.Role">Role</label>
-        <input asp-for="User.Role" class="form-control" disabled="!EditMode" />
+        <label asp-for="UserProfile.Role">Role</label>
+        <input asp-for="UserProfile.Role" class="form-control" disabled="!EditMode" />
     </div>
     <div class="form-group">
 
 
         @if (!Model.EditMode)
         {
-            <button type="submit" class="btn btn-primary" asp-page-handler="EditProfile">Edit Profile</button>
+            <a asp-page-handler="EditProfile" class="btn btn-primary">Edit Profile</a>
             <button type="submit" class="btn btn-danger" asp-page-handler="DeleteProfile">Delete Profile</button>
         }
         else

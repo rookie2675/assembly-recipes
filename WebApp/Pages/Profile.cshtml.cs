@@ -12,7 +12,7 @@ namespace WebApp.Pages
         private readonly IUserService _userService;
 
         [BindProperty]
-        public User? User { get; set; }
+        public User? UserProfile { get; set; }
 
         public bool EditMode { get; set; }
 
@@ -34,10 +34,31 @@ namespace WebApp.Pages
             if (!long.TryParse(userIdAsString, out long userId))
                 return NotFound();
 
-            User = _userService.GetById(userId);
+            UserProfile = _userService.GetById(userId);
 
             if (User is null)
                 return NotFound();
+
+            return Page();
+        }
+
+        public IActionResult OnGetEditProfile()
+        {   
+            var user = HttpContext.User;
+            string? userIdAsString = user.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userIdAsString))
+                return Unauthorized();
+
+            if (!long.TryParse(userIdAsString, out long userId))
+                return NotFound();
+
+            UserProfile = _userService.GetById(userId);
+
+            if (UserProfile is null)
+                return NotFound();
+
+            EditMode = true;
 
             return Page();
         }
@@ -69,7 +90,7 @@ namespace WebApp.Pages
         public IActionResult OnPostCancelEdit()
         {
             EditMode = false;
-            User = _userService.GetById(User.Id.Value);
+            UserProfile = _userService.GetById(UserProfile.Id.Value);
             return Page();
         }
 
@@ -80,9 +101,9 @@ namespace WebApp.Pages
                 return Page();
             }
 
-            _userService.Update(User);
+            _userService.Update(UserProfile);
             EditMode = false;
-            User = _userService.GetById(User.Id.Value);
+            UserProfile = _userService.GetById(UserProfile.Id.Value);
 
             return Page();
         }
