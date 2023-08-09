@@ -14,9 +14,9 @@
                 <li class="nav-item">
                     <a class="btn btn-link nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
                 </li>
-                <form id="logoutForm" asp-page-handler="Logout" method="post" class="form-inline">
-                    <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
-                </form>
+                <li class="nav-item">
+                    <a class="btn btn-link nav-link text-light" asp-page="/Login" asp-page-handler="Logout">Logout</a>
+                </li>
             }
             else
             {

@@ -54,10 +54,10 @@ namespace WebApp.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostLogoutAsync()
+        public async Task<IActionResult> OnGetLogoutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToPage("/Index");
+            return RedirectToPage("/Recipes");
         }
 
         private bool AreCredentialsValid()

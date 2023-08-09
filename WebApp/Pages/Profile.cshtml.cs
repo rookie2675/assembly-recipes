@@ -90,8 +90,7 @@ namespace WebApp.Pages
         public IActionResult OnPostCancelEdit()
         {
             EditMode = false;
-            UserProfile = _userService.GetById(UserProfile.Id.Value);
-            return Page();
+            return OnGetEditProfile();
         }
 
         public IActionResult OnPost()

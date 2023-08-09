@@ -18,7 +18,7 @@ namespace IoC
         {
             ArgumentNullException.ThrowIfNull(configuration);
 
-            string connectionString = configuration.GetConnectionString("AssemblyConnection")
+            string connectionString = configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
 
             serviceCollection.AddSingleton(connectionString);
