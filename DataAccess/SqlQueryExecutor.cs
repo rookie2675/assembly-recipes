@@ -1,4 +1,5 @@
 using DataAccess.Contracts;
+using Microsoft.Extensions.Logging;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -7,8 +8,13 @@ namespace DataAccess
     public class SqlQueryExecutor : ISqlQueryExecutor
     {
         private readonly string _connectionString;
+        private readonly ILogger<SqlQueryExecutor> _logger;
 
-        public SqlQueryExecutor(string connectionString) => _connectionString = connectionString;
+        public SqlQueryExecutor(string connectionString, ILogger<SqlQueryExecutor> logger)
+        {
+            _logger = logger;
+            _connectionString = connectionString;
+        }
 
         public SqlDataReader ExecuteQuery(string query, SqlParameter[] parameters)
         {
@@ -21,14 +27,32 @@ namespace DataAccess
             return command.ExecuteReader();
         }
 
-        public SqlDataReader ExecuteQuery(string query)
+        public SqlDataReader? ExecuteQuery(string query)
         {
             var connection = new SqlConnection(_connectionString);
-            connection.Open();
 
-            var command = new SqlCommand(query, connection);
-
-            return command.ExecuteReader();
+            try
+            {
+                connection.Open();
+                var command = new SqlCommand(query, connection);
+                return command.ExecuteReader();
+            }
+            catch (SqlException exception)
+            {
+                _logger.LogError($"An SQL exception occurred while executing the query '{query}':{Environment.NewLine}{exception.Message}");
+                return null;
+            }
+            catch (Exception exception) {
+                _logger.LogError($"An error occurred while executing the query '{query}':{Environment.NewLine}{exception.Message}");
+                return null;
+            }
+            finally
+            {
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
         }
 
         public SqlDataReader ExecuteQuery(string query, SqlParameter parameter)

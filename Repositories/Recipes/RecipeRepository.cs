@@ -1,6 +1,7 @@
 ﻿using DataAccess.Contracts;
 using Domain;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace Repositories.Recipes
@@ -9,9 +10,11 @@ namespace Repositories.Recipes
     {
         private readonly IRecipeMapper _recipeMapper;
         private readonly ISqlQueryExecutor _databaseHelper;
+        private readonly ILogger<RecipeRepository> _logger;
 
-        public RecipeRepository(IRecipeMapper recipeMapper, ISqlQueryExecutor databaseHelper)
+        public RecipeRepository(IRecipeMapper recipeMapper, ISqlQueryExecutor databaseHelper, ILogger<RecipeRepository> logger)
         {
+            _logger = logger;
             _recipeMapper = recipeMapper;
             _databaseHelper = databaseHelper;
         }
@@ -45,10 +48,17 @@ namespace Repositories.Recipes
 
             using (var reader = _databaseHelper.ExecuteQuery(query))
             {
-                while (reader.Read())
+                if (reader is null)
                 {
-                    var recipe = _recipeMapper.MapReaderToRecipe(reader);
-                    recipes.Add(recipe);
+                    _logger.LogError("Unable to execute query because the reader is null");
+                } 
+                else {
+
+                    while (reader.Read())
+                    {
+                        var recipe = _recipeMapper.MapReaderToRecipe(reader);
+                        recipes.Add(recipe);
+                    }
                 }
             }
 

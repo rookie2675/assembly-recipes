@@ -8,7 +8,7 @@ namespace DataAccess.Contracts
 
         SqlDataReader ExecuteQuery(string query, SqlParameter parameter);
 
-        SqlDataReader ExecuteQuery(string query);
+        SqlDataReader? ExecuteQuery(string query);
 
         public T? ExecuteScalar<T>(string query, SqlParameter[] parameters);
 
